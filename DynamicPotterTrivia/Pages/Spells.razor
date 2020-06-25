@@ -1,0 +1,116 @@
+﻿@page "/spells"
+@using DynamicPotterTrivia.Models
+@inject HttpClient Http
+@inject IMatToaster Toaster
+
+<MatHeadline1>Spell Questions</MatHeadline1>
+<MatBody1>Guess the spell from the given description and type!</MatBody1>
+
+@if (spells == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <MatBody1><b>Current Score:</b> @currentScore</MatBody1>
+
+    <MatButton Raised="true" @onclick="GetNewQuestion" Icon="navigate_next">New question</MatButton>
+
+    <MatBody1><b>Description:</b> @randomSpell.effect</MatBody1>
+    <MatBody1><b>Type:</b> @randomSpell.type</MatBody1>
+
+    <p>
+        <MatTextField @bind-Value="@currentAnswer" Label="Place your answer here..."></MatTextField>
+    </p>
+    <MatButton Unelevated="true" @onclick="CheckAnswer" Icon="done">Answer!</MatButton>
+    <MatButton Outlined="true" @onclick="GetHint" Icon="search" Disabled="@noMoreHints">Get hint</MatButton>
+    <MatBody1>Hint: @hintString</MatBody1>
+
+    <MatDialog @bind-IsOpen="@correctAnswer">
+        <MatDialogTitle>Correct!</MatDialogTitle>
+        <MatDialogContent>
+            <MatBody1>Yes, @currentAnswer is the correct answer!</MatBody1>
+        </MatDialogContent>
+        <MatDialogActions>
+            <MatButton OnClick="@GetNewQuestion">New Question</MatButton>
+        </MatDialogActions>
+    </MatDialog>
+}
+
+@code {
+    private Spell[] spells;
+    private Spell randomSpell;
+
+    private string currentAnswer = "";
+    private int currentScore = 0;
+
+    private bool correctAnswer = false;
+
+    private string hintString = "";
+    private bool noMoreHints = false;
+    int hintCounter = 1;
+
+    Random r = new Random();
+
+    protected override async Task OnInitializedAsync()
+    {
+        //fetch all spells
+        spells = await Http.GetFromJsonAsync<Spell[]>("jsonData/spells.json");
+        GetNewQuestion();
+    }
+
+    private void CheckAnswer()
+    {
+        if (currentAnswer.ToLower() == randomSpell.spell.ToLower())
+        {
+            correctAnswer = true;
+            currentScore = currentScore + 10;
+        }
+        else
+        {
+            Toaster.Add("Wrong Answer!", MatToastType.Danger, "Sorry", "", config =>
+            {
+                config.ShowCloseButton = true;
+                config.ShowProgressBar = true;
+                config.ShowTransitionDuration = Convert.ToInt32(false);
+                config.VisibleStateDuration = Convert.ToInt32(true);
+                config.HideTransitionDuration = Convert.ToInt32(true);
+
+                config.RequireInteraction = true;
+            });
+            currentScore = currentScore - 2;
+        }
+    }
+
+    private void GetNewQuestion()
+    {
+        correctAnswer = false;
+        noMoreHints = false;
+        currentAnswer = string.Empty;
+
+        hintString = string.Empty;
+        hintCounter = 1;
+
+        randomSpell = spells[r.Next(0, spells.Length - 1)];
+        StateHasChanged();
+    }
+
+    private void GetHint()
+    {
+        if (hintCounter < randomSpell.spell.Length+1)
+        {
+            if (randomSpell.spell[hintCounter-1] == ' ')
+            {
+                hintCounter++; //skip spaces when generating hints
+            }
+            hintString = randomSpell.spell.Substring(0, hintCounter);
+            hintCounter++;
+            currentScore--;
+        }
+        else
+        {
+            noMoreHints = true;
+        }
+
+    }
+}

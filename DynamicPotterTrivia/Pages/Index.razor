@@ -1,0 +1,59 @@
+﻿@page "/"
+
+<MatHeadline1>Potter Trivia</MatHeadline1>
+
+<MatBody1>Select a category on the menu to the left to get started.</MatBody1>
+
+<MatButton Raised="true" @onclick="GetRandomHouse" Icon="navigate_next">Sorting Hat!</MatButton>
+<hr/>
+@if (houseChosen)
+{
+    <style>
+        .demo-mat-card {
+            max-width: 229px;
+        }
+ 
+        .demo-mat-card-content {
+            padding: 1rem;
+        }
+ 
+        .demo-mat-card-clean-margin {
+            margin: 0px;
+        }
+    </style>
+    <MatCard class="demo-mat-card">
+        <MatCardContent>
+            <img src="@chosenHouseImg"/>
+            <div class="demo-mat-card-content">
+                <MatHeadline6 class="demo-mat-card-clean-margin">
+                    @chosenHouseName!
+                </MatHeadline6>
+            </div>
+        </MatCardContent>
+    </MatCard>
+}
+
+
+@code
+         {
+    List<string> houses = new List<string>()
+{
+        "Gryffindor",
+        "Hufflepuff",
+        "Ravenclaw",
+        "Slytherin"
+    };
+
+    private string chosenHouseName = "";
+    private string chosenHouseImg = "";
+    private bool houseChosen = false;
+    Random r = new Random();
+
+    private void GetRandomHouse()
+    {
+        chosenHouseName = houses[r.Next(0, houses.Count - 1)];
+        chosenHouseImg = "/images/" + chosenHouseName.ToLower() + ".png";
+        houseChosen = true;
+    }
+
+}

@@ -1,0 +1,202 @@
+@page "/characters"
+@using DynamicPotterTrivia.Models
+@inject HttpClient Http
+@inject IMatToaster Toaster
+
+<MatHeadline1>Character Questions</MatHeadline1>
+<MatBody1>Guess the character from the clues given! Use the fewest clues clues to get the highest score!</MatBody1>
+
+@if (characters == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="mat-layout-grid">
+        <div class="mat-layout-grid-inner">
+            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+                <MatBody1><b>Current Score:</b> @currentScore</MatBody1>
+
+                <MatButton Raised="true" @onclick="GetNewQuestion" Icon="navigate_next">New question</MatButton>
+
+                <MatButton Outlined="true" @onclick="GetAnotherClue" Disabled="@noMoreClues" Icon="search">Get clue</MatButton>
+                <MatButton Outlined="true" @onclick="ShowAnswer" Icon="priority_high">Show answer</MatButton>
+
+                <MatBody1><b>Points awarded for question:</b> @currentPointsAwarded</MatBody1>
+
+                <p>
+                    <MatTextField @bind-Value="@currentAnswer" Label="Place your answer here..."></MatTextField>
+                </p>
+                <MatButton Unelevated="true" @onclick="CheckAnswer" Icon="done">Answer!</MatButton>
+            </div>
+            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+                <MatHeadline4>Character clues:</MatHeadline4>
+
+                @foreach (var clue in clues)
+                {
+                    <MatBody1>@((MarkupString)clue)</MatBody1>
+                }
+            </div>
+
+        </div>
+    </div>
+    <MatDialog @bind-IsOpen="@correctAnswer">
+        <MatDialogTitle>Correct!</MatDialogTitle>
+        <MatDialogContent>
+            <MatBody1>Yes, @currentAnswer is the correct answer!</MatBody1>
+        </MatDialogContent>
+        <MatDialogActions>
+            <MatButton OnClick="@GetNewQuestion">New Question</MatButton>
+        </MatDialogActions>
+    </MatDialog>
+}
+
+@code {
+    private HPCharacter[] characters;
+    private HPCharacter randomCharacter;
+
+    private string characterName = "";
+    private string currentAnswer = "";
+
+    bool correctAnswer = false;
+
+    private Dictionary<string, string> characterProperties;
+    private List<string> clues = new List<string>();
+    private bool noMoreClues = false;
+
+    Random r = new Random();
+
+    int currentScore = 0;
+    int currentPointsAwarded = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //fetch all characters
+        characters = await Http.GetFromJsonAsync<HPCharacter[]>("jsonData/hp_characters.json");
+
+        //select a random character as first question
+        GetNewQuestion();
+    }
+
+    private void CheckAnswer()
+    {
+        if (currentAnswer.ToLower() == characterName.ToLower())
+        {
+            correctAnswer = true;
+            currentScore = currentScore + currentPointsAwarded;
+        }
+        else
+        {
+            Toaster.Add("Wrong Answer!", MatToastType.Danger, "Sorry", "", config =>
+            {
+                config.ShowCloseButton = true;
+                config.ShowProgressBar = true;
+                config.ShowTransitionDuration = Convert.ToInt32(false);
+                config.VisibleStateDuration = Convert.ToInt32(true);
+                config.HideTransitionDuration = Convert.ToInt32(true);
+
+                config.RequireInteraction = true;
+            });
+            currentScore--;
+        }
+    }
+
+    private void GetNewQuestion()
+    {
+        //Remove all data from previous question
+        clues.Clear();
+        noMoreClues = false;
+        correctAnswer = false;
+        currentAnswer = string.Empty;
+
+        //select a random character
+        randomCharacter = characters[r.Next(0, characters.Length - 1)];
+
+        //load the properties of the random character to use as clues
+        characterProperties = new Dictionary<string, string>();
+
+        currentPointsAwarded = 10;
+
+        if (randomCharacter.role != null)
+        {
+            characterProperties.Add("Role", randomCharacter.role);
+        }
+        if (randomCharacter.house != null)
+        {
+            characterProperties.Add("House", randomCharacter.house);
+        }
+        if (randomCharacter.school != null)
+        {
+            characterProperties.Add("School", randomCharacter.school);
+        }
+        if (randomCharacter.bloodStatus != null)
+        {
+            characterProperties.Add("Blood Status", randomCharacter.bloodStatus);
+        }
+        if (randomCharacter.species != null)
+        {
+            characterProperties.Add("Species", randomCharacter.species);
+        }
+        if (randomCharacter.alias != null)
+        {
+            characterProperties.Add("Alias", randomCharacter.alias);
+        }
+        if (randomCharacter.animagus != null)
+        {
+            characterProperties.Add("Animagus", randomCharacter.animagus);
+        }
+        if (randomCharacter.wand != null)
+        {
+            characterProperties.Add("Wand", randomCharacter.wand);
+        }
+        if (randomCharacter.patronus != null)
+        {
+            characterProperties.Add("Patronus", randomCharacter.patronus);
+        }
+        //add boolean properties
+        characterProperties.Add("Is a Death Eater", randomCharacter.deathEater.ToString());
+        characterProperties.Add("Is a member of the Order of the Phoenix", randomCharacter.orderOfThePhoenix.ToString());
+        characterProperties.Add("Is a member of Dumbledores Army", randomCharacter.dumbledoresArmy.ToString());
+        characterProperties.Add("Works at the Ministry of Magic", randomCharacter.ministryOfMagic.ToString());
+
+        //Show starting clues for question
+        GetAnotherClue();
+        GetAnotherClue();
+        //set the character name(correct answer)
+        characterName = randomCharacter.name.ToLower();
+    }
+    private void GetAnotherClue()
+    {
+        if (characterProperties.Count > 1)
+        {
+            var randomEntry = characterProperties.ElementAt(r.Next(0, characterProperties.Count - 1));
+            String randomKey = randomEntry.Key;
+            String randomValue = randomEntry.Value;
+            clues.Add("<b>" + randomKey + "</b>" + ": " + randomValue);
+            characterProperties.Remove(randomKey);
+            currentPointsAwarded = currentPointsAwarded - 1;
+            StateHasChanged();
+        }
+        else
+        {
+            clues.Add("No more clues to give, sorry!");
+            StateHasChanged();
+            noMoreClues = true;
+        }
+    }
+
+    private void ShowAnswer()
+    {
+        Toaster.Add("The answer is " + randomCharacter.name, MatToastType.Info, "Solution", "", config =>
+        {
+            config.ShowCloseButton = true;
+            config.ShowProgressBar = true;
+            config.ShowTransitionDuration = Convert.ToInt32(false);
+            config.VisibleStateDuration = Convert.ToInt32(true);
+            config.HideTransitionDuration = Convert.ToInt32(true);
+
+            config.RequireInteraction = true;
+        });
+        GetNewQuestion();
+    }
+}
