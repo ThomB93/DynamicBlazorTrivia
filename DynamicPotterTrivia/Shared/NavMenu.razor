@@ -1,5 +1,8 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">Potter Trivia</a>
+﻿@using DynamicPotterTrivia.Services
+@inject IScoreTrackerService ScoreTrackerService
+
+<div class="top-row pl-4 navbar navbar-dark">
+    <a class="navbar-brand" href="">Nerdy Trivia</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -8,18 +11,32 @@
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
         <li class="nav-item px-3">
+            <MatBody1 style="color: white"><b>Total Score:</b> @ScoreTrackerService.GetTotalScore()</MatBody1>
+            <MatBody1 style="color: white"><b>Current Level:</b> 0</MatBody1> <!--Placeholder value-->
+        </li>
+        <li class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="characters">
-                <MatIcon Icon="person"></MatIcon>  Characters
+            <NavLink class="nav-link" href="statistics" Match="NavLinkMatch.All">
+                <MatIcon Icon="bar_chart"></MatIcon> Statistics
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="hpcharacters">
+                <MatIcon Icon="person"></MatIcon>  HP Characters
             </NavLink>
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="spells">
-                <MatIcon Icon="flare"></MatIcon> Spells
+                <MatIcon Icon="flare"></MatIcon>  HP Spells
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="lotrcharacters">
+                <MatIcon Icon="person"></MatIcon> LOTR Characters
             </NavLink>
         </li>
     </ul>
@@ -33,5 +50,19 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        ScoreTrackerService.OnChange += OnNotify;
+    }
+
+    //Calls state changed on component when notified from service
+    public async void OnNotify()
+    {
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
     }
 }

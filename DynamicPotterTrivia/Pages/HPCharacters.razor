@@ -1,0 +1,59 @@
+@page "/hpcharacters"
+@using DynamicPotterTrivia.Models
+@using DynamicPotterTrivia.Services
+@inject HttpClient Http
+@inject IMatToaster Toaster
+@inject IScoreTrackerService ScoreTrackerService
+
+<MatHeadline1>Character Questions</MatHeadline1>
+<MatBody1>Guess the character from the clues given! Use the fewest hints and clues possible to get the highest score!</MatBody1>
+
+@if (characters == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="mat-layout-grid">
+        <div class="mat-layout-grid-inner">
+            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+                <!--Temporary element for showing answer-->
+                <MatBody1><b>Answer:</b> @randomCharacter.name</MatBody1>
+
+                <MatButton Raised="true" @onclick="GetNewQuestion" Icon="navigate_next">New question</MatButton>
+
+                <MatButton Outlined="true" @onclick="GetAnotherClue" Disabled="@noMoreClues" Icon="search">Get clue</MatButton>
+                <MatButton Outlined="true" @onclick="GetHint" Disabled="@noMoreHints" Icon="search">Get hint</MatButton>
+
+                <MatBody1>Hint: @hintString</MatBody1>
+
+                <MatBody1><b>Current points awarded:</b> @currentPointsAwarded</MatBody1>
+
+                <p>
+                    <MatTextField @bind-Value="@currentAnswer" Label="Place your answer here..."></MatTextField>
+                </p>
+                <MatButton Unelevated="true" @onclick="CheckAnswer" Icon="done">Answer!</MatButton>
+                <MatButton Outlined="true" @onclick="ShowAnswer" Icon="priority_high">Show answer</MatButton>
+            </div>
+            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+                <MatHeadline4>Character clues:</MatHeadline4>
+
+                @foreach (var clue in clues)
+                {
+                    <MatBody1>@((MarkupString)clue)</MatBody1>
+                }
+            </div>
+
+        </div>
+    </div>
+    <MatDialog @bind-IsOpen="@correctAnswer">
+        <MatDialogTitle>Correct!</MatDialogTitle>
+        <MatDialogContent>
+            <MatBody1>Yes, @currentAnswer is the correct answer!</MatBody1>
+        </MatDialogContent>
+        <MatDialogActions>
+            <MatButton OnClick="@GetNewQuestion">New Question</MatButton>
+        </MatDialogActions>
+    </MatDialog>
+}
+
