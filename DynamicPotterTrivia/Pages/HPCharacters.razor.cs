@@ -28,7 +28,6 @@ namespace DynamicPotterTrivia.Pages
 
         Random r = new Random();
 
-        int currentScore = 0;
         int currentPointsAwarded = 0;
 
         protected override async Task OnInitializedAsync()
@@ -47,7 +46,7 @@ namespace DynamicPotterTrivia.Pages
                 correctAnswer = true;
                 //currentScore = currentScore + currentPointsAwarded;
                 ScoreTrackerService.AddToTotalScore(currentPointsAwarded, "HP");
-                
+                ScoreTrackerService.UpdateAnswerCounters("HP", true);
                 StateHasChanged();
             }
             else
@@ -64,6 +63,7 @@ namespace DynamicPotterTrivia.Pages
                 });
                 //currentScore--;
                 ScoreTrackerService.RemoveFromTotalScore(2, "HP");
+                ScoreTrackerService.UpdateAnswerCounters("HP", false);
                 StateHasChanged();
             }
         }

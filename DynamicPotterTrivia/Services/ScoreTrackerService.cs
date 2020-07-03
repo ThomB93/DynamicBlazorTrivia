@@ -103,12 +103,12 @@ namespace DynamicPotterTrivia.Services
                     break;
             }
         }
-        public void UpdateAnswerCounters(string category, string type)
+        public void UpdateAnswerCounters(string category, bool correct)
         {
             switch (category)
             {
                 case "HP":
-                    if (type == "correct")
+                    if (correct)
                     {
                         TotalCorrectAnswers++;
                         CorrectHPAnswers++;
@@ -121,7 +121,7 @@ namespace DynamicPotterTrivia.Services
 
                     break;
                 case "LOTR":
-                    if (type == "correct")
+                    if (correct)
                     {
                         TotalCorrectAnswers++;
                         CorrectLOTRAnswers++;

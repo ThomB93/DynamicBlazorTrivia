@@ -38,6 +38,7 @@ namespace DynamicPotterTrivia.Pages
                 correctAnswer = true;
                 //currentScore = currentScore + 10;
                 ScoreTrackerService.AddToTotalScore(currentPointsAwarded, "HP");
+                ScoreTrackerService.UpdateAnswerCounters("HP", true);
             }
             else
             {
@@ -52,6 +53,7 @@ namespace DynamicPotterTrivia.Pages
                     config.RequireInteraction = true;
                 });
                 ScoreTrackerService.RemoveFromTotalScore(2, "HP");
+                ScoreTrackerService.UpdateAnswerCounters("HP", false);
             }
         }
 

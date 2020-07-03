@@ -39,6 +39,7 @@ namespace DynamicPotterTrivia.Services
         public int GetHPWrongAnswers();
 
         public int GetLOTRWrongAnswers();
+        public void UpdateAnswerCounters(string category, bool correct);
 
 
         event Action OnChange;
