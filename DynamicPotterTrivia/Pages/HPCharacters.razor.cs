@@ -46,7 +46,8 @@ namespace DynamicPotterTrivia.Pages
             {
                 correctAnswer = true;
                 //currentScore = currentScore + currentPointsAwarded;
-                ScoreTrackerService.AddToTotalScore(currentPointsAwarded);
+                ScoreTrackerService.AddToTotalScore(currentPointsAwarded, "HP");
+                
                 StateHasChanged();
             }
             else
@@ -62,7 +63,7 @@ namespace DynamicPotterTrivia.Pages
                     config.RequireInteraction = true;
                 });
                 //currentScore--;
-                ScoreTrackerService.RemoveFromTotalScore(2);
+                ScoreTrackerService.RemoveFromTotalScore(2, "HP");
                 StateHasChanged();
             }
         }
@@ -146,6 +147,7 @@ namespace DynamicPotterTrivia.Pages
                 clues.Add("<b>" + randomKey + "</b>" + ": " + randomValue);
                 characterProperties.Remove(randomKey);
                 currentPointsAwarded--;
+                ScoreTrackerService.UpdateClueCounters("HP");
                 StateHasChanged();
             }
             else
@@ -167,6 +169,7 @@ namespace DynamicPotterTrivia.Pages
                 hintString = randomCharacter.name.Substring(0, hintCounter);
                 hintCounter++;
                 currentPointsAwarded--;
+                ScoreTrackerService.UpdateHintCounters("HP");
             }
             else
             {

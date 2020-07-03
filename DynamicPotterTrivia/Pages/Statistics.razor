@@ -1,5 +1,28 @@
-﻿<h3>Statistics</h3>
+﻿@page "/statistics"
 
-@code {
+@using ChartJs.Blazor.Charts
+@using ChartJs.Blazor.ChartJS.PieChart
+@using ChartJs.Blazor.ChartJS.Common.Properties
+@using ChartJs.Blazor.Util
+@using DynamicPotterTrivia.Services
 
+@inject IScoreTrackerService ScoreTrackerService
+
+<MatHeadline1>Statistics</MatHeadline1>
+
+@if (ScoreTrackerService.GetTotalScore() > 0)
+{
+    <div class="row">
+        <div class="col-md-6">
+            <ChartJsPieChart @ref="_pieChartJs" Config="@_PieConfig" Width="600" Height="300" />
+        </div>
+        <div class="col-md-6">
+            <ChartJsBarChart @ref="_barChartJs" Config="@_BarConfig" Width="300" Height="300" />
+        </div>
+    </div>
 }
+else
+{
+    <MatBody1>Total Score is 0. No statistics to show.</MatBody1>
+}
+

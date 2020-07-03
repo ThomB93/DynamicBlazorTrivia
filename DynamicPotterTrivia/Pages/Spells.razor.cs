@@ -37,7 +37,7 @@ namespace DynamicPotterTrivia.Pages
             {
                 correctAnswer = true;
                 //currentScore = currentScore + 10;
-                ScoreTrackerService.AddToTotalScore(currentPointsAwarded);
+                ScoreTrackerService.AddToTotalScore(currentPointsAwarded, "HP");
             }
             else
             {
@@ -51,7 +51,7 @@ namespace DynamicPotterTrivia.Pages
 
                     config.RequireInteraction = true;
                 });
-                ScoreTrackerService.RemoveFromTotalScore(2);
+                ScoreTrackerService.RemoveFromTotalScore(2, "HP");
             }
         }
 
@@ -95,6 +95,7 @@ namespace DynamicPotterTrivia.Pages
                 hintString = randomSpell.spell.Substring(0, hintCounter);
                 hintCounter++;
                 currentPointsAwarded--;
+                ScoreTrackerService.UpdateHintCounters("HP");
             }
             else
             {

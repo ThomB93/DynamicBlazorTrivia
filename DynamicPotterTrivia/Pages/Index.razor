@@ -1,8 +1,10 @@
 ﻿@page "/"
 
-<MatHeadline1>Potter Trivia</MatHeadline1>
+<MatHeadline1>Nerdy Trivia</MatHeadline1>
 
-<MatBody1>Select a category on the menu to the left to get started.</MatBody1>
+<MatBody1>Select a category on the menu to the left to get started!</MatBody1>
+
+<MatDivider></MatDivider>
 
 <MatButton Raised="true" @onclick="GetRandomHouse" Icon="navigate_next">Sorting Hat!</MatButton>
 <hr/>
@@ -25,9 +27,9 @@
         <MatCardContent>
             <img src="@chosenHouseImg"/>
             <div class="demo-mat-card-content">
-                <MatHeadline6 class="demo-mat-card-clean-margin">
+                <MatHeadline5 class="demo-mat-card-clean-margin">
                     @chosenHouseName!
-                </MatHeadline6>
+                </MatHeadline5>
             </div>
         </MatCardContent>
     </MatCard>
