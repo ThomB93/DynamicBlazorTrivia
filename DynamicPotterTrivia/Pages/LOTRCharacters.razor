@@ -25,8 +25,10 @@ else
 
                 <MatButton Outlined="true" @onclick="GetAnotherClue" Disabled="@noMoreClues" Icon="search">Get clue</MatButton>
                 <MatButton Outlined="true" @onclick="GetHint" Disabled="@noMoreHints" Icon="search">Get hint</MatButton>
+                
+                <hr/>
 
-                <MatBody1>Hint: @hintString</MatBody1>
+                <MatBody1><b>Hint:</b> @hintString</MatBody1>
 
                 <MatBody1><b>Current points awarded:</b> @currentPointsAwarded</MatBody1>
 
