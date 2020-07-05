@@ -50,7 +50,7 @@ else
     <MatDialog @bind-IsOpen="@correctAnswer">
         <MatDialogTitle>Correct!</MatDialogTitle>
         <MatDialogContent>
-            <MatBody1>Yes, @currentAnswer is the correct answer! Learn more at @randomCharacter.wikiUrl.ToString()</MatBody1>
+            <MatBody1>Yes, @currentAnswer is the correct answer! Click <a href="@randomCharacter.wikiUrl.ToString()">here</a> to learn more about the character.</MatBody1>
         </MatDialogContent>
         <MatDialogActions>
             <MatButton OnClick="@GetNewQuestion">New Question</MatButton>
