@@ -1,0 +1,24 @@
+name: Build and Deploy to Github Pages
+on:
+    push:
+        branches: 
+        - master
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v2
+        - name: Setup .NET Core 
+          uses: actions/setup-dotnet@v1
+          with:
+            dotnet-version: 3.1.301
+        - name: Publish with dotnet
+          run: dotnet publish ./DynamicPotterTrivia.sln --configuration Release --output build
+        - name: Deploy to Github Pages
+          uses: JamesIves/github-pages-deploy-action@releases/v3
+          with:
+            GITHUB_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+            BASE_BRANCH: master
+            BRANCH: gh-pages
+            FOLDER: build/wwwroot
+            CLEAN: true
