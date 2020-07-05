@@ -10,16 +10,213 @@
 
 <MatHeadline1>Statistics</MatHeadline1>
 
+<style>
+    .demo-mat-card {
+        max-width: 250px;
+        background-color: ghostwhite
+    }
+
+    .demo-mat-card-content {
+        padding: 1rem;
+    }
+
+    .demo-mat-card-clean-margin {
+        margin: 0px;
+    }
+</style>
+
 @if (ScoreTrackerService.GetTotalScore() > 0)
 {
     <div class="row">
         <div class="col-md-6">
             <ChartJsPieChart @ref="_pieChartJs" Config="@_PieConfig" Width="600" Height="300" />
+            <MatHeadline3>Totals:</MatHeadline3>
+            <div class="mat-layout-grid">
+                <div class="mat-layout-grid-inner">
+                    <div class="mat-layout-grid-cell">
+                        <MatCard class="demo-mat-card">
+                            <MatCardContent>
+                                <div class="demo-mat-card-content">
+                                    <MatHeadline6 class="demo-mat-card-clean-margin">
+                                        Score: @ScoreTrackerService.GetTotalScore()
+                                    </MatHeadline6>
+                                </div>
+                            </MatCardContent>
+                        </MatCard>
+                    </div>
+                    <div class="mat-layout-grid-cell">
+                        <MatCard class="demo-mat-card">
+                            <MatCardContent>
+                                <div class="demo-mat-card-content">
+                                    <MatHeadline6 class="demo-mat-card-clean-margin">
+                                        Correct Answers: @ScoreTrackerService.GetTotalCorrectAnswers()
+                                    </MatHeadline6>
+                                </div>
+                            </MatCardContent>
+                        </MatCard>
+                    </div>
+                    <div class="mat-layout-grid-cell">
+                        <MatCard class="demo-mat-card">
+                            <MatCardContent>
+                                <div class="demo-mat-card-content">
+                                    <MatHeadline6 class="demo-mat-card-clean-margin">
+                                        Wrong Answers: @ScoreTrackerService.GetTotalWrongAnswers()
+                                    </MatHeadline6>
+                                </div>
+                            </MatCardContent>
+                        </MatCard>
+                    </div>
+                    <div class="mat-layout-grid-cell">
+                        <MatCard class="demo-mat-card">
+                            <MatCardContent>
+                                <div class="demo-mat-card-content">
+                                    <MatHeadline6 class="demo-mat-card-clean-margin">
+                                        Clues used: @ScoreTrackerService.GetTotalCluesUsed()
+                                    </MatHeadline6>
+                                </div>
+                            </MatCardContent>
+                        </MatCard>
+                    </div>
+                    <div class="mat-layout-grid-cell">
+                        <MatCard class="demo-mat-card">
+                            <MatCardContent>
+                                <div class="demo-mat-card-content">
+                                    <MatHeadline6 class="demo-mat-card-clean-margin">
+                                        Hints used: @ScoreTrackerService.GetTotalHintsUsed()
+                                    </MatHeadline6>
+                                </div>
+                            </MatCardContent>
+                        </MatCard>
+                    </div>
+                </div>
+            </div>
+            <MatHeadline3>Harry Potter</MatHeadline3>
+            <div class="mat-layout-grid">
+                <div class="mat-layout-grid-inner">
+                    <div class="mat-layout-grid-cell">
+                        <MatCard class="demo-mat-card">
+                            <MatCardContent>
+                                <div class="demo-mat-card-content">
+                                    <MatHeadline6 class="demo-mat-card-clean-margin">
+                                        Score: @ScoreTrackerService.GetTotalHPScore()
+                                    </MatHeadline6>
+                                </div>
+                            </MatCardContent>
+                        </MatCard>
+                    </div>
+                    <div class="mat-layout-grid-cell">
+                        <MatCard class="demo-mat-card">
+                            <MatCardContent>
+                                <div class="demo-mat-card-content">
+                                    <MatHeadline6 class="demo-mat-card-clean-margin">
+                                        Correct Answers: @ScoreTrackerService.GetHPCorrectAnswers()
+                                    </MatHeadline6>
+                                </div>
+                            </MatCardContent>
+                        </MatCard>
+                    </div>
+                    <div class="mat-layout-grid-cell">
+                        <MatCard class="demo-mat-card">
+                            <MatCardContent>
+                                <div class="demo-mat-card-content">
+                                    <MatHeadline6 class="demo-mat-card-clean-margin">
+                                        Wrong Answers: @ScoreTrackerService.GetHPWrongAnswers()
+                                    </MatHeadline6>
+                                </div>
+                            </MatCardContent>
+                        </MatCard>
+                    </div>
+                    <div class="mat-layout-grid-cell">
+                        <MatCard class="demo-mat-card">
+                            <MatCardContent>
+                                <div class="demo-mat-card-content">
+                                    <MatHeadline6 class="demo-mat-card-clean-margin">
+                                        Clues used: @ScoreTrackerService.GetHPCluesUsed()
+                                    </MatHeadline6>
+                                </div>
+                            </MatCardContent>
+                        </MatCard>
+                    </div>
+                    <div class="mat-layout-grid-cell">
+                        <MatCard class="demo-mat-card">
+                            <MatCardContent>
+                                <div class="demo-mat-card-content">
+                                    <MatHeadline6 class="demo-mat-card-clean-margin">
+                                        Hints used: @ScoreTrackerService.GetHPHintsUsed()
+                                    </MatHeadline6>
+                                </div>
+                            </MatCardContent>
+                        </MatCard>
+                    </div>
+                </div>
+            </div>
+            <MatHeadline3>Lord of the Rings</MatHeadline3>
+            <div class="mat-layout-grid">
+                <div class="mat-layout-grid-inner">
+                    <div class="mat-layout-grid-cell">
+                        <MatCard class="demo-mat-card">
+                            <MatCardContent>
+                                <div class="demo-mat-card-content">
+                                    <MatHeadline6 class="demo-mat-card-clean-margin">
+                                        Score: @ScoreTrackerService.GetTotalLOTRScore()
+                                    </MatHeadline6>
+                                </div>
+                            </MatCardContent>
+                        </MatCard>
+                    </div>
+                    <div class="mat-layout-grid-cell">
+                        <MatCard class="demo-mat-card">
+                            <MatCardContent>
+                                <div class="demo-mat-card-content">
+                                    <MatHeadline6 class="demo-mat-card-clean-margin">
+                                        Correct Answers: @ScoreTrackerService.GetLOTRCorrectAnswers()
+                                    </MatHeadline6>
+                                </div>
+                            </MatCardContent>
+                        </MatCard>
+                    </div>
+                    <div class="mat-layout-grid-cell">
+                        <MatCard class="demo-mat-card">
+                            <MatCardContent>
+                                <div class="demo-mat-card-content">
+                                    <MatHeadline6 class="demo-mat-card-clean-margin">
+                                        Wrong Answers: @ScoreTrackerService.GetLOTRWrongAnswers()
+                                    </MatHeadline6>
+                                </div>
+                            </MatCardContent>
+                        </MatCard>
+                    </div>
+                    <div class="mat-layout-grid-cell">
+                        <MatCard class="demo-mat-card">
+                            <MatCardContent>
+                                <div class="demo-mat-card-content">
+                                    <MatHeadline6 class="demo-mat-card-clean-margin">
+                                        Clues used: @ScoreTrackerService.GetLOTRCluesUsed()
+                                    </MatHeadline6>
+                                </div>
+                            </MatCardContent>
+                        </MatCard>
+                    </div>
+                    <div class="mat-layout-grid-cell">
+                        <MatCard class="demo-mat-card">
+                            <MatCardContent>
+                                <div class="demo-mat-card-content">
+                                    <MatHeadline6 class="demo-mat-card-clean-margin">
+                                        Hints used: @ScoreTrackerService.GetLOTRHintsUsed()
+                                    </MatHeadline6>
+                                </div>
+                            </MatCardContent>
+                        </MatCard>
+                    </div>
+                </div>
+            </div>
+
         </div>
         <div class="col-md-6">
             <ChartJsBarChart @ref="_barChartJs" Config="@_BarConfig" Width="300" Height="300" />
         </div>
     </div>
+    
 }
 else
 {
