@@ -1,5 +1,56 @@
-﻿<h3>LOTRQuotes</h3>
+﻿@page "/lotrquotes"
 
-@code {
+@using DynamicPotterTrivia.Models
+@using DynamicPotterTrivia.Services
+@inject HttpClient Http
+@inject IMatToaster Toaster
+@inject IScoreTrackerService ScoreTrackerService
 
+<MatHeadline1>Lord of the Rings Quotes</MatHeadline1>
+<MatBody1>Guess the character from the movie quote shown on the right! Use the fewest hints possible to get the highest score!</MatBody1>
+
+@if (_quotes == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="mat-layout-grid">
+        <div class="mat-layout-grid-inner">
+            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+                <!--Temporary element for showing answer-->
+                <MatBody1><b>Answer:</b> @_characterName</MatBody1>
+
+                <MatButton Raised="true" @onclick="GetNewQuestion" Icon="navigate_next">New question</MatButton>
+
+                <MatButton Outlined="true" @onclick="GetHint" Disabled="@_noMoreHints" Icon="search">Get hint</MatButton>
+
+
+
+                <hr />
+
+                <MatBody1><b>Hint:</b> @_hintString</MatBody1>
+
+                <MatBody1><b>Current points awarded:</b> @_currentPointsAwarded</MatBody1>
+
+                <p>
+                    <MatTextField @bind-Value="@_currentAnswer" Label="Place your answer here..."></MatTextField>
+                </p>
+                <MatButton Unelevated="true" @onclick="CheckAnswer" Icon="done">Answer!</MatButton>
+                <MatButton Outlined="true" @onclick="ShowAnswer" Icon="priority_high">Show answer</MatButton>
+            </div>
+            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+                <MatHeadline5>"@_randomQuote.Dialog.ToString()"</MatHeadline5>
+            </div>
+        </div>
+    </div>
+    <MatDialog @bind-IsOpen="@_correctAnswer">
+        <MatDialogTitle>Correct!</MatDialogTitle>
+        <MatDialogContent>
+            <MatBody1>Yes, @_currentAnswer is the correct answer!</MatBody1>
+        </MatDialogContent>
+        <MatDialogActions>
+            <MatButton OnClick="@GetNewQuestion">New Question</MatButton>
+        </MatDialogActions>
+    </MatDialog>
 }

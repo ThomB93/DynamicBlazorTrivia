@@ -13,100 +13,102 @@ namespace DynamicPotterTrivia.Pages
 {
     public partial class LOTRCharacters
     {
-        private LotrCharacter[] characters;
-        private LotrCharacter randomCharacter;
+        private LotrCharacter[] _characters;
+        private LotrCharacter _randomCharacter;
 
-        private string characterName = "";
-        private string currentAnswer = "";
+        private string _characterName = "";
+        private string _currentAnswer = "";
 
-        bool correctAnswer = false;
+        private bool _correctAnswer;
 
-        private Dictionary<string, string> characterProperties;
-        private List<string> clues = new List<string>();
-        private bool noMoreClues = false;
+        private Dictionary<string, string> _characterProperties;
+        private List<string> _clues;
+        private bool _noMoreClues = false;
 
-        private int hintCounter = 1;
-        private string hintString = "";
-        private bool noMoreHints = false;
+        private int _hintCounter = 1;
+        private string _hintString = "";
+        private bool _noMoreHints = false;
 
         Random r = new Random();
 
-        private int currentPointsAwarded = 0;
+        private int _currentPointsAwarded = 0;
         protected override async Task OnInitializedAsync()
         {
-            //fetch all characters
-            characters = await Http.GetFromJsonAsync<LotrCharacter[]>("jsonData/lotr_characters.json");
-
+            //fetch all _characters
+            _characters = await Http.GetFromJsonAsync<LotrCharacter[]>("jsonData/lotr_characters.json");
+            _clues = new List<string>();
+            _characterProperties = new Dictionary<string, string>();
             //select a random character as first question
             GetNewQuestion();
         }
 
         private void GetNewQuestion()
         {
+            Console.WriteLine("GetNewQuestion");
             //Remove all data from previous question
-            clues.Clear();
-            noMoreClues = false;
-            correctAnswer = false;
-            currentAnswer = string.Empty;
+            _clues.Clear();
+            _noMoreClues = false;
+            _correctAnswer = false;
+            _currentAnswer = string.Empty;
 
             //reset hints
-            hintCounter = 1;
-            noMoreHints = false;
-            hintString = String.Empty;
+            _hintCounter = 1;
+            _noMoreHints = false;
+            _hintString = string.Empty;
+
+            Console.WriteLine("GetNewQuestion properties reset");
 
             //select a random character
-            randomCharacter = characters[r.Next(0, characters.Length - 1)];
-
-            //Check if random character contains enough properties to for clues
-            //propertyCounter = NonNullPropertiesCount(randomCharacter);
+            _randomCharacter = _characters[r.Next(0, _characters.Length - 1)];
+            //Check if random character contains enough properties to for _clues
+            //propertyCounter = NonNullPropertiesCount(_randomCharacter);
             //if (!(propertyCounter >= 4))
             //{
             //    propertyCounter = 0;
             //    GetNewQuestion();
             //}
 
-            //load the properties of the random character to use as clues
-            characterProperties = new Dictionary<string, string>();
+            //load the properties of the random character to use as _clues
+            _characterProperties.Clear();
+            _currentPointsAwarded = 12;
 
-            currentPointsAwarded = 12;
-
-            if (randomCharacter.birth != null)
+            if (_randomCharacter.birth != null)
             {
-                characterProperties.Add("Birth", randomCharacter.birth);
+                _characterProperties.Add("Birth", _randomCharacter.birth.ToString());
             }
-            if (randomCharacter.death != null)
+            if (_randomCharacter.death != null)
             {
-                characterProperties.Add("Death", randomCharacter.death);
+                _characterProperties.Add("Death", _randomCharacter.death.ToString());
             }
-            if (randomCharacter.gender != null)
+            if (_randomCharacter.gender != null)
             {
-                characterProperties.Add("Gender", randomCharacter.gender);
+                _characterProperties.Add("Gender", _randomCharacter.gender.ToString());
             }
-            if (randomCharacter.hair != null)
+            if (_randomCharacter.hair != null)
             {
-                characterProperties.Add("Hair", randomCharacter.hair);
+                _characterProperties.Add("Hair", _randomCharacter.hair.ToString());
             }
-            if (randomCharacter.height != null)
+            if (_randomCharacter.height != null)
             {
-                characterProperties.Add("Height", randomCharacter.height);
+                _characterProperties.Add("Height", _randomCharacter.height.ToString());
             }
-            if (randomCharacter.race != null)
+            if (_randomCharacter.race != null)
             {
-                characterProperties.Add("Race", randomCharacter.race.ToString());
+                _characterProperties.Add("Race", _randomCharacter.race.ToString());
             }
-            if (randomCharacter.realm != null)
+            if (_randomCharacter.realm != null)
             {
-                characterProperties.Add("Realm", randomCharacter.realm.ToString());
+                _characterProperties.Add("Realm", _randomCharacter.realm.ToString());
             }
-            if (randomCharacter.spouse != null)
+            if (_randomCharacter.spouse != null)
             {
-                characterProperties.Add("Spouse", randomCharacter.spouse.ToString());
+                _characterProperties.Add("Spouse", _randomCharacter.spouse.ToString());
             }
 
-            //remove empty clues
+            //remove empty _clues
             List<string> cluesToRemove = new List<string>();
 
-            foreach (var entry in characterProperties)
+            foreach (var entry in _characterProperties)
             {
                 if (entry.Value == "")
                 {
@@ -116,63 +118,66 @@ namespace DynamicPotterTrivia.Pages
 
             foreach (var entry in cluesToRemove)
             {
-                characterProperties.Remove(entry);
+                _characterProperties.Remove(entry);
             }
 
-            //check if there are enough clues after removing empty clues
-            if (!(characterProperties.Count >= 4))
+            //check if there are enough _clues after removing empty _clues
+            if (!(_characterProperties.Count >= 3))
             {
                 GetNewQuestion();
             }
-
-            //Show starting clues for question
-            GetAnotherClue();
-            GetAnotherClue();
-            //set the character name(correct answer)
-            characterName = randomCharacter.name.ToString().ToLower();
+            else
+            {
+                //Show starting _clues for question
+                GetAnotherClue();
+                GetAnotherClue();
+                //set the character name(correct answer)
+                _characterName = _randomCharacter.name.ToString().ToLower();
+            }
         }
         private void GetAnotherClue()
         {
-            if (characterProperties.Count > 1)
+            Console.WriteLine("Get Another Clue");
+            if (_characterProperties.Count > 1)
             {
-                var randomEntry = characterProperties.ElementAt(r.Next(0, characterProperties.Count - 1));
+                var randomEntry = _characterProperties.ElementAt(r.Next(0, _characterProperties.Count - 1));
                 String randomKey = randomEntry.Key;
                 String randomValue = randomEntry.Value;
                 
-                clues.Add("<b>" + randomKey + "</b>" + ": " + randomValue);
-                characterProperties.Remove(randomKey);
-                currentPointsAwarded--;
+                _clues.Add("<b>" + randomKey + "</b>" + ": " + randomValue);
+                _characterProperties.Remove(randomKey);
+                _currentPointsAwarded--;
                 ScoreTrackerService.UpdateClueCounters("LOTR");
                 StateHasChanged();
             }
             else
             {
-                clues.Add("No more clues to give, sorry!");
+                _clues.Add("No more clues to give, sorry!");
                 StateHasChanged();
-                noMoreClues = true;
+                _noMoreClues = true;
             }
         }
-        public void GetHint()
+        private void GetHint()
         {
-            if (hintCounter < randomCharacter.name.ToString().Length + 1)
+            if (_hintCounter < _randomCharacter.name.ToString().Length + 1)
             {
-                if (randomCharacter.name.ToString()[hintCounter - 1] == ' ')
+                if (_randomCharacter.name.ToString()[_hintCounter - 1] == ' ')
                 {
-                    hintCounter++; //skip spaces when generating hints
+                    _hintCounter++; //skip spaces when generating hints
                 }
-                hintString = randomCharacter.name.ToString().Substring(0, hintCounter);
-                hintCounter++;
-                currentPointsAwarded--;
+                _hintString = _randomCharacter.name.ToString().Substring(0, _hintCounter);
+                _hintCounter++;
+                _currentPointsAwarded--;
                 ScoreTrackerService.UpdateHintCounters("LOTR");
             }
             else
             {
-                noMoreHints = true;
+                _noMoreHints = true;
             }
         }
         private void ShowAnswer()
         {
-            Toaster.Add("The answer is " + randomCharacter.name, MatToastType.Info, "Solution", "", config =>
+            Toaster.Add("The answer is " + _randomCharacter.name, MatToastType.Info, "Solution", "", config =>
             {
                 config.ShowCloseButton = true;
                 config.ShowProgressBar = true;
@@ -186,11 +191,11 @@ namespace DynamicPotterTrivia.Pages
         }
         private void CheckAnswer()
         {
-            if (currentAnswer.ToLower() == characterName.ToLower())
+            if (_currentAnswer.ToLower() == _characterName.ToLower())
             {
-                correctAnswer = true;
-                //currentScore = currentScore + currentPointsAwarded;
-                ScoreTrackerService.AddToTotalScore(currentPointsAwarded, "LOTR");
+                _correctAnswer = true;
+                //currentScore = currentScore + _currentPointsAwarded;
+                ScoreTrackerService.AddToTotalScore(_currentPointsAwarded, "LOTR");
                 ScoreTrackerService.UpdateAnswerCounters("LOTR", true);
                 StateHasChanged();
             }
@@ -214,7 +219,7 @@ namespace DynamicPotterTrivia.Pages
         }
 
         //HELPER METHOD
-        public int NonNullPropertiesCount(object entity)
+        private int NonNullPropertiesCount(object entity)
         {
             return entity.GetType()
                          .GetProperties()

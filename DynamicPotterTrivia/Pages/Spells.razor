@@ -14,21 +14,36 @@
 }
 else
 {
-    <MatBody1><b>Current Points Awarded:</b> @currentPointsAwarded</MatBody1>
+<div class="mat-layout-grid">
+    <div class="mat-layout-grid-inner">
+        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
 
-    <MatButton Raised="true" @onclick="GetNewQuestion" Icon="navigate_next">New question</MatButton>
-    <MatButton Outlined="true" @onclick="GetHint" Icon="search" Disabled="@noMoreHints">Get hint</MatButton>
 
-    <MatBody1><b>Description:</b> @randomSpell.effect</MatBody1>
-    <MatBody1><b>Type:</b> @randomSpell.type</MatBody1>
+            <MatButton Raised="true" @onclick="GetNewQuestion" Icon="navigate_next">New question</MatButton>
+            <MatButton Outlined="true" @onclick="GetHint" Icon="search" Disabled="@noMoreHints">Get hint</MatButton>
 
-    <p>
-        <MatTextField @bind-Value="@currentAnswer" Label="Place your answer here..."></MatTextField>
-    </p>
-    <MatButton Unelevated="true" @onclick="CheckAnswer" Icon="done">Answer!</MatButton>
-    <MatButton Outlined="true" @onclick="ShowAnswer" Icon="done">Show answer</MatButton>
+            <hr />
 
-    <MatBody1>Hint: @hintString</MatBody1>
+            <MatBody1><b>Hint:</b> @hintString</MatBody1>
+
+            <MatBody1><b>Current Points Awarded:</b> @currentPointsAwarded</MatBody1>
+
+            <p>
+                <MatTextField @bind-Value="@currentAnswer" Label="Place your answer here..."></MatTextField>
+            </p>
+
+            <MatButton Unelevated="true" @onclick="CheckAnswer" Icon="done">Answer!</MatButton>
+            <MatButton Outlined="true" @onclick="ShowAnswer" Icon="done">Show answer</MatButton>
+
+
+        </div>
+        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+            <MatHeadline5><b>Description:</b> @randomSpell.effect</MatHeadline5>
+            <MatHeadline5><b>Type:</b> @randomSpell.type</MatHeadline5>
+        </div>
+        </div>
+    </div>
+    
 
     <MatDialog @bind-IsOpen="@correctAnswer">
         <MatDialogTitle>Correct!</MatDialogTitle>
