@@ -49,7 +49,7 @@
                         <MatCardContent>
                             <div class="demo-mat-card-content">
                                 <MatHeadline6 class="demo-mat-card-clean-margin">
-                                    Correct Answers: @ScoreTrackerService.GetTotalCorrectAnswers()
+                                    Correct: @ScoreTrackerService.GetTotalCorrectAnswers()
                                 </MatHeadline6>
                             </div>
                         </MatCardContent>
@@ -60,7 +60,7 @@
                         <MatCardContent>
                             <div class="demo-mat-card-content">
                                 <MatHeadline6 class="demo-mat-card-clean-margin">
-                                    Wrong Answers: @ScoreTrackerService.GetTotalWrongAnswers()
+                                    Wrong: @ScoreTrackerService.GetTotalWrongAnswers()
                                 </MatHeadline6>
                             </div>
                         </MatCardContent>
@@ -109,7 +109,7 @@
                         <MatCardContent>
                             <div class="demo-mat-card-content">
                                 <MatHeadline6 class="demo-mat-card-clean-margin">
-                                    Correct Answers: @ScoreTrackerService.GetHPCorrectAnswers()
+                                    Correct: @ScoreTrackerService.GetHPCorrectAnswers()
                                 </MatHeadline6>
                             </div>
                         </MatCardContent>
@@ -120,7 +120,7 @@
                         <MatCardContent>
                             <div class="demo-mat-card-content">
                                 <MatHeadline6 class="demo-mat-card-clean-margin">
-                                    Wrong Answers: @ScoreTrackerService.GetHPWrongAnswers()
+                                    Wrong: @ScoreTrackerService.GetHPWrongAnswers()
                                 </MatHeadline6>
                             </div>
                         </MatCardContent>
@@ -169,7 +169,7 @@
                         <MatCardContent>
                             <div class="demo-mat-card-content">
                                 <MatHeadline6 class="demo-mat-card-clean-margin">
-                                    Correct Answers: @ScoreTrackerService.GetLOTRCorrectAnswers()
+                                    Correct: @ScoreTrackerService.GetLOTRCorrectAnswers()
                                 </MatHeadline6>
                             </div>
                         </MatCardContent>
@@ -180,7 +180,7 @@
                         <MatCardContent>
                             <div class="demo-mat-card-content">
                                 <MatHeadline6 class="demo-mat-card-clean-margin">
-                                    Wrong Answers: @ScoreTrackerService.GetLOTRWrongAnswers()
+                                    Wrong: @ScoreTrackerService.GetLOTRWrongAnswers()
                                 </MatHeadline6>
                             </div>
                         </MatCardContent>
@@ -217,19 +217,19 @@
         <div class="row">
             <div class="col-md-6">
                 <ChartJsRadarChart @ref="_radarChartJsHP"
-                                    Config="@_RadarConfigHP"
-                                    Width="600"
-                                    Height="400" />
+                                   Config="@_RadarConfigHP"
+                                   Width="600"
+                                   Height="400" />
             </div>
             <div class="col-md-6">
                 <ChartJsRadarChart @ref="_radarChartJsLOTR"
-                                    Config="@_RadarConfigLOTR"
-                                    Width="600"
-                                    Height="400" />
+                                   Config="@_RadarConfigLOTR"
+                                   Width="600"
+                                   Height="400" />
             </div>
         </div>
 
-        
+
     </div>
 </div>
 
