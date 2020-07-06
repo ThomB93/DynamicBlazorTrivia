@@ -1,5 +1,6 @@
 ﻿@using DynamicPotterTrivia.Services
 @inject IScoreTrackerService ScoreTrackerService
+@inject IJSRuntime JsRuntime
 
 <div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href="">Nerdy Trivia</a>
@@ -10,6 +11,13 @@
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
+        <li class="nav-item px-3">
+            <MatBody1 style="color: white"><b>Export Data</b></MatBody1>
+            <button @onclick="@(() => ExportScores(@fileName))">Export</button>
+            <MatBody1 style="color: white"><b>Import Data</b></MatBody1>
+            <InputFile OnChange="ImportScores"/>
+
+        </li>
         <li class="nav-item px-3">
             <MatBody1 style="color: white"><b>Total Score:</b> @ScoreTrackerService.GetTotalScore()</MatBody1>
             <MatBody1 style="color: white"><b>Current Level:</b> 0</MatBody1> <!--Placeholder value-->
@@ -26,12 +34,12 @@
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="hpcharacters">
-                <MatIcon Icon="person"></MatIcon>  HP Characters
+                <MatIcon Icon="person"></MatIcon> HP Characters
             </NavLink>
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="spells">
-                <MatIcon Icon="flare"></MatIcon>  HP Spells
+                <MatIcon Icon="flare"></MatIcon> HP Spells
             </NavLink>
         </li>
         <li class="nav-item px-3">
@@ -47,8 +55,11 @@
     </ul>
 </div>
 
-@code {
+@code
+{
     private bool collapseNavMenu = true;
+    private string fileName = "score_export_" + DateTime.Now + ".txt";
+    IFileListEntry file;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
@@ -69,5 +80,39 @@
         {
             StateHasChanged();
         });
+    }
+
+    private async void ExportScores(string fileName)
+    {
+        await JsRuntime.InvokeAsync<object>(
+            "ExportScores", fileName, ScoreTrackerService.GenerateExportStringFromPropertyValues());
+
+    }
+
+
+    async void ImportScores(IFileListEntry[] files)
+    {
+        Dictionary<string, string> importedScores = new Dictionary<string, string>();
+        file = files.FirstOrDefault(); //only accept 1 file
+
+        Console.WriteLine(file.Name);
+
+        String result;
+        using (var reader = new System.IO.StreamReader(file.Data))
+        {
+            while (true)
+            {
+                result = await reader.ReadLineAsync();
+                if (result == null)
+                {
+                    break;
+                }
+                string[] currentLine = result.Split("=");
+                importedScores.Add(currentLine[0], currentLine[1]);
+                Console.WriteLine(currentLine[0] + ": " + currentLine[1]);
+            }
+        }
+        //Update all score values from the imported file
+        ScoreTrackerService.UpdateScoresFromImport(importedScores);
     }
 }

@@ -9,8 +9,8 @@ namespace DynamicPotterTrivia.Services
     {
         //SCORE PROPERTIES
         private int TotalScore { get; set; } = 30;
-        private int HP_Score { get; set; } = 10;
-        private int LOTR_Score { get; set; } = 20;
+        private int HPScore { get; set; } = 10;
+        private int LOTRScore { get; set; } = 20;
         //HINT PROPERTIES
         private int TotalHintsUsed { get; set; }
         private int HPHintsUsed { get; set; }
@@ -39,12 +39,12 @@ namespace DynamicPotterTrivia.Services
             {
                 case "HP":
                     TotalScore += score;
-                    HP_Score += score;
+                    HPScore += score;
                     StateChanged();
                     break;
                 case "LOTR":
                     TotalScore += score;
-                    LOTR_Score += score;
+                    LOTRScore += score;
                     StateChanged();
                     break;
                 default:
@@ -58,12 +58,12 @@ namespace DynamicPotterTrivia.Services
             {
                 case "HP":
                     TotalScore -= score;
-                    HP_Score -= score;
+                    HPScore -= score;
                     StateChanged();
                     break;
                 case "LOTR":
                     TotalScore -= score;
-                    LOTR_Score -= score;
+                    LOTRScore -= score;
                     StateChanged();
                     break;
                 default:
@@ -146,11 +146,11 @@ namespace DynamicPotterTrivia.Services
         }
         public int GetTotalHPScore()
         {
-            return HP_Score;
+            return HPScore;
         }
         public int GetTotalLOTRScore()
         {
-            return LOTR_Score;
+            return LOTRScore;
         }
         //HINTS-
         public int GetTotalHintsUsed()
@@ -208,6 +208,71 @@ namespace DynamicPotterTrivia.Services
         private void CheckAndUpdateCurrentLevel(int totalScore)
         {
             
+        }
+
+        public string GenerateExportStringFromPropertyValues()
+        {
+            return
+                "TotalScore=" + TotalScore + "\nHPScore=" + HPScore + "\nLOTRScore=" + LOTRScore +
+                "\nTotalHintsUsed=" + TotalHintsUsed + "\nHPHintsUsed=" + HPHintsUsed + "\nLOTRHintsUsed=" +
+                LOTRHintsUsed + "\nTotalCluesUsed=" + TotalCluesUsed + "\nHPCluesUsed=" + HPCluesUsed +
+                "\nLOTRCluesUsed=" + LOTRCluesUsed + "\nTotalCorrectAnswers=" + TotalCorrectAnswers +
+                "\nTotalWrongAnswers=" + TotalWrongAnswers + "\nCorrectHPAnswers=" + CorrectHPAnswers +
+                "\nCorrectLOTRAnswers=" + CorrectLOTRAnswers + "\nWrongHPAnswers=" + WrongHPAnswers +
+                "\nWrongLOTRAnswers=" + WrongLOTRAnswers;
+        }
+
+        public void UpdateScoresFromImport(Dictionary<string, string> importedScores)
+        {
+            //update properties based on key value pairs
+            foreach (var entry in importedScores)
+            {
+                switch (entry.Key)
+                {
+                    case "TotalScore":
+                        TotalScore = Convert.ToInt32(entry.Value);
+                        break;
+                    case "HPScore":
+                        HPScore = Convert.ToInt32(entry.Value);
+                        break;
+                    case "LOTRScore":
+                        LOTRScore = Convert.ToInt32(entry.Value);
+                        break;
+                    case "TotalHintsUsed":
+                        TotalHintsUsed = Convert.ToInt32(entry.Value);
+                        break;
+                    case "LOTRHintsUsed":
+                        LOTRHintsUsed = Convert.ToInt32(entry.Value);
+                        break;
+                    case "TotalCluesUsed":
+                        TotalCluesUsed = Convert.ToInt32(entry.Value);
+                        break;
+                    case "HPCluesUsed":
+                        HPCluesUsed = Convert.ToInt32(entry.Value);
+                        break;
+                    case "LOTRCluesUsed":
+                        LOTRCluesUsed = Convert.ToInt32(entry.Value);
+                        break;
+                    case "TotalCorrectAnswers":
+                        TotalCorrectAnswers = Convert.ToInt32(entry.Value);
+                        break;
+                    case "TotalWrongAnswers":
+                        TotalWrongAnswers = Convert.ToInt32(entry.Value);
+                        break;
+                    case "CorrectHPAnswers":
+                        CorrectHPAnswers = Convert.ToInt32(entry.Value);
+                        break;
+                    case "CorrectLOTRAnswers":
+                        CorrectLOTRAnswers = Convert.ToInt32(entry.Value);
+                        break;
+                    case "WrongHPAnswers":
+                        WrongHPAnswers = Convert.ToInt32(entry.Value);
+                        break;
+                    case "WrongLOTRAnswers":
+                        WrongLOTRAnswers = Convert.ToInt32(entry.Value);
+                        break;
+                }
+            }
         }
         
         private void StateChanged() => OnChange?.Invoke();

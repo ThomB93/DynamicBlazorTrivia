@@ -40,7 +40,8 @@ namespace DynamicPotterTrivia.Services
 
         public int GetLOTRWrongAnswers();
         public void UpdateAnswerCounters(string category, bool correct);
-
+        public string GenerateExportStringFromPropertyValues();
+        public void UpdateScoresFromImport(Dictionary<string, string> importedScores);
 
         event Action OnChange;
     }

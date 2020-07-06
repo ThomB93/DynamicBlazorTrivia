@@ -94,6 +94,46 @@ namespace DynamicPotterTrivia.Pages
         }
         private void CheckAnswer()
         {
+            //Logic for allowing shortened names as answers
+            switch (_currentAnswer.ToLower())
+            {
+                case "aragorn":
+                    if (_characterName.ToLower() == "aragorn ii elessar")
+                    {
+                        _characterName = "aragorn";
+                    }
+
+                    break;
+                case "sam":
+                    if (_characterName.ToLower() == "samwise gamgee")
+                    {
+                        _characterName = "sam";
+                    }
+
+                    break;
+                case "frodo":
+                    if (_characterName.ToLower() == "frodo baggins")
+                    {
+                        _characterName = "frodo";
+                    }
+
+                    break;
+                case "merry":
+                    if (_characterName.ToLower() == "meriadoc brandybuck")
+                    {
+                        _characterName = "merry";
+                    }
+
+                    break;
+                case "pippin":
+                    if (_characterName.ToLower() == "peregrin took")
+                    {
+                        _characterName = "pippin";
+                    }
+
+                    break;
+            }
+
             if (_currentAnswer.ToLower() == _characterName.ToLower())
             {
                 _correctAnswer = true;
