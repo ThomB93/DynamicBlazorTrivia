@@ -11,21 +11,26 @@ namespace DynamicPotterTrivia.Services
         private int TotalScore { get; set; } = 30;
         private int HPScore { get; set; } = 10;
         private int LOTRScore { get; set; } = 20;
+        private int GOTScore { get; set; } = 20;
         //HINT PROPERTIES
         private int TotalHintsUsed { get; set; }
         private int HPHintsUsed { get; set; }
         private int LOTRHintsUsed { get; set; }
+        private int GOTHintsUsed { get; set; }
         //CLUES PROPERTIES
         private int TotalCluesUsed { get; set; }
         private int HPCluesUsed { get; set; }
         private int LOTRCluesUsed { get; set; }
+        private int GOTCluesUsed { get; set; }
         //ANSWERS PROPERTIES
         private int TotalCorrectAnswers { get; set; } = 5;
         private int TotalWrongAnswers { get; set; } = 3;
         private int CorrectHPAnswers { get; set; }
         private int CorrectLOTRAnswers { get; set; }
+        private int CorrectGOTAnswers { get; set; }
         private int WrongHPAnswers { get; set; }
         private int WrongLOTRAnswers { get; set; }
+        private int WrongGOTAnswers { get; set; }
 
         //may be implemented later
         public int Level { get; set; }
@@ -47,6 +52,11 @@ namespace DynamicPotterTrivia.Services
                     LOTRScore += score;
                     StateChanged();
                     break;
+                case "GOT":
+                    TotalScore += score;
+                    GOTScore += score;
+                    StateChanged();
+                    break;
                 default:
                     break;
             }
@@ -66,6 +76,11 @@ namespace DynamicPotterTrivia.Services
                     LOTRScore -= score;
                     StateChanged();
                     break;
+                case "GOT":
+                    TotalScore -= score;
+                    GOTScore -= score;
+                    StateChanged();
+                    break;
                 default:
                     break;
             }
@@ -83,6 +98,10 @@ namespace DynamicPotterTrivia.Services
                     TotalHintsUsed++;
                     LOTRHintsUsed++;
                     break;
+                case "GOT":
+                    TotalHintsUsed++;
+                    GOTHintsUsed++;
+                    break;
                 default:
                     break;
             }
@@ -98,6 +117,10 @@ namespace DynamicPotterTrivia.Services
                 case "LOTR":
                     TotalCluesUsed++;
                     LOTRCluesUsed++;
+                    break;
+                case "GOT":
+                    TotalCluesUsed++;
+                    GOTCluesUsed++;
                     break;
                 default:
                     break;
@@ -133,6 +156,19 @@ namespace DynamicPotterTrivia.Services
                     }
 
                     break;
+                case "GOT":
+                    if (correct)
+                    {
+                        TotalCorrectAnswers++;
+                        CorrectGOTAnswers++;
+                    }
+                    else
+                    {
+                        TotalWrongAnswers++;
+                        WrongGOTAnswers++;
+                    }
+
+                    break;
                 default:
                     break;
             }
@@ -152,6 +188,10 @@ namespace DynamicPotterTrivia.Services
         {
             return LOTRScore;
         }
+        public int GetTotalGOTScore()
+        {
+            return GOTScore;
+        }
         //HINTS-
         public int GetTotalHintsUsed()
         {
@@ -164,6 +204,10 @@ namespace DynamicPotterTrivia.Services
         public int GetLOTRHintsUsed()
         {
             return LOTRHintsUsed;
+        }
+        public int GetGOTHintsUsed()
+        {
+            return GOTHintsUsed;
         }
         //CLUES
         public int GetTotalCluesUsed()
@@ -178,6 +222,10 @@ namespace DynamicPotterTrivia.Services
         {
             return LOTRCluesUsed;
         }
+        public int GetGOTCluesUsed()
+        {
+            return GOTCluesUsed;
+        }
         //ANSWERS
         public int GetTotalCorrectAnswers()
         {
@@ -187,6 +235,7 @@ namespace DynamicPotterTrivia.Services
         {
             return TotalWrongAnswers;
         }
+        //CORRECT ANSWERS
         public int GetHPCorrectAnswers()
         {
             return CorrectHPAnswers;
@@ -195,6 +244,11 @@ namespace DynamicPotterTrivia.Services
         {
             return CorrectLOTRAnswers;
         }
+        public int GetGOTCorrectAnswers()
+        {
+            return CorrectGOTAnswers;
+        }
+        //WRONG ANSWERS
         public int GetHPWrongAnswers()
         {
             return WrongHPAnswers;
@@ -202,6 +256,10 @@ namespace DynamicPotterTrivia.Services
         public int GetLOTRWrongAnswers()
         {
             return WrongLOTRAnswers;
+        }
+        public int GetGOTWrongAnswers()
+        {
+            return WrongGOTAnswers;
         }
 
         //To be implemented

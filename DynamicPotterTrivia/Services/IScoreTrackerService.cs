@@ -13,10 +13,12 @@ namespace DynamicPotterTrivia.Services
         public int GetTotalScore();
         public int GetTotalHPScore();
         public int GetTotalLOTRScore();
+        public int GetTotalGOTScore();
         //HINTS-
         public int GetTotalHintsUsed();
         public int GetHPHintsUsed();
         public int GetLOTRHintsUsed();
+        public int GetGOTHintsUsed();
         public void UpdateHintCounters(string category);
 
         //CLUES
@@ -25,6 +27,7 @@ namespace DynamicPotterTrivia.Services
         public int GetHPCluesUsed();
 
         public int GetLOTRCluesUsed();
+        public int GetGOTCluesUsed();
         public void UpdateClueCounters(string category);
 
         //ANSWERS
@@ -35,14 +38,17 @@ namespace DynamicPotterTrivia.Services
         public int GetHPCorrectAnswers();
 
         public int GetLOTRCorrectAnswers();
+        public int GetGOTCorrectAnswers();
 
         public int GetHPWrongAnswers();
 
         public int GetLOTRWrongAnswers();
+        public int GetGOTWrongAnswers();
         public void UpdateAnswerCounters(string category, bool correct);
+        //IMPORT EXPORT
         public string GenerateExportStringFromPropertyValues();
         public void UpdateScoresFromImport(Dictionary<string, string> importedScores);
-
+        //EVENTS
         event Action OnChange;
     }
 }

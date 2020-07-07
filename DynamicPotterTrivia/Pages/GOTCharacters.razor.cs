@@ -2,19 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Json;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Text.Json;
 using System.Threading.Tasks;
 using DynamicPotterTrivia.Models;
 using MatBlazor;
 
 namespace DynamicPotterTrivia.Pages
 {
-    public partial class LOTRCharacters
+    public partial class GOTCharacters
     {
-        private LotrCharacter[] _characters;
-        private LotrCharacter _randomCharacter;
+        private GotCharacter[] _characters;
+        private GotCharacter _randomCharacter;
 
         private string _characterName = "";
         private string _currentAnswer = "";
@@ -32,14 +29,27 @@ namespace DynamicPotterTrivia.Pages
         Random r = new Random();
 
         private int _currentPointsAwarded = 0;
+
         protected override async Task OnInitializedAsync()
         {
             //fetch all _characters
-            _characters = await Http.GetFromJsonAsync<LotrCharacter[]>("jsonData/lotr_characters.json");
+            _characters = await Http.GetFromJsonAsync<GotCharacter[]>("jsonData/got_characters.json");
             _clues = new List<string>();
             _characterProperties = new Dictionary<string, string>();
             //select a random character as first question
             GetNewQuestion();
+        }
+
+        private string GetCharacterNameFromUrl(string url)
+        {
+            string name;
+            name = _characters.FirstOrDefault(c => c.Url == url)?.Name;
+            if (name != null)
+            {
+                return name;
+            }
+
+            return "";
         }
 
         private void GetNewQuestion()
@@ -58,50 +68,62 @@ namespace DynamicPotterTrivia.Pages
 
             //select a random character
             _randomCharacter = _characters[r.Next(0, _characters.Length - 1)];
-            //Check if random character contains enough properties to for _clues
-            //propertyCounter = NonNullPropertiesCount(_randomCharacter);
-            //if (!(propertyCounter >= 4))
-            //{
-            //    propertyCounter = 0;
-            //    GetNewQuestion();
-            //}
-
-            //load the properties of the random character to use as _clues
+            //_randomCharacter = _characters.FirstOrDefault(c => c.Name == "Bethany Bolton");
             _characterProperties.Clear();
             _currentPointsAwarded = 12;
 
-            if (_randomCharacter.birth != null)
+            if (_randomCharacter.Gender != null)
             {
-                _characterProperties.Add("Birth", _randomCharacter.birth.ToString());
+                _characterProperties.Add("Gender", _randomCharacter.Gender);
             }
-            if (_randomCharacter.death != null)
+            if (_randomCharacter.Culture != null)
             {
-                _characterProperties.Add("Death", _randomCharacter.death.ToString());
+                _characterProperties.Add("Culture", _randomCharacter.Culture);
             }
-            if (_randomCharacter.gender != null)
+            if (_randomCharacter.Born != null)
             {
-                _characterProperties.Add("Gender", _randomCharacter.gender.ToString());
+                _characterProperties.Add("Born", _randomCharacter.Born);
             }
-            if (_randomCharacter.hair != null)
+            if (_randomCharacter.Died != null)
             {
-                _characterProperties.Add("Hair", _randomCharacter.hair.ToString());
+                _characterProperties.Add("Died", _randomCharacter.Died);
             }
-            if (_randomCharacter.height != null)
+
+            if (_randomCharacter.Titles.Count > 0)
             {
-                _characterProperties.Add("Height", _randomCharacter.height.ToString());
+                if (_randomCharacter.Titles[0] != "")
+                {
+                    for (int i = 0; i < _randomCharacter.Titles.Count; i++)
+                    {
+                        _characterProperties.Add("Title " + (i+1), _randomCharacter.Titles[i]);
+                    }
+                }
             }
-            if (_randomCharacter.race != null)
+            if (_randomCharacter.Aliases.Count > 0)
             {
-                _characterProperties.Add("Race", _randomCharacter.race.ToString());
+                if (_randomCharacter.Aliases[0] != "")
+                {
+                    for (int i = 0; i < _randomCharacter.Aliases.Count; i++)
+                    {
+                        _characterProperties.Add("Alias " + (i+1), _randomCharacter.Aliases[i]);
+                    }
+                }
             }
-            if (_randomCharacter.realm != null)
+            Console.WriteLine("Adding family relations");
+            if (_randomCharacter.Father != null)
             {
-                _characterProperties.Add("Realm", _randomCharacter.realm.ToString());
+                _characterProperties.Add("Father", GetCharacterNameFromUrl(_randomCharacter.Father));
             }
-            if (_randomCharacter.spouse != null)
+            Console.WriteLine("Added father relations");
+            if (_randomCharacter.Mother != null)
             {
-                _characterProperties.Add("Spouse", _randomCharacter.spouse.ToString());
+                _characterProperties.Add("Mother", GetCharacterNameFromUrl(_randomCharacter.Mother));
             }
+            if (_randomCharacter.Spouse != null)
+            {
+                _characterProperties.Add("Spouse", GetCharacterNameFromUrl(_randomCharacter.Spouse));
+            }
+            Console.WriteLine("Added family relations");
 
             //remove empty _clues
             List<string> cluesToRemove = new List<string>();
@@ -130,7 +152,7 @@ namespace DynamicPotterTrivia.Pages
                 GetAnotherClue();
                 GetAnotherClue();
                 //set the character name(correct answer)
-                _characterName = _randomCharacter.name.ToString().ToLower();
+                _characterName = _randomCharacter.Name.ToLower();
             }
         }
         private void GetAnotherClue()
@@ -141,11 +163,11 @@ namespace DynamicPotterTrivia.Pages
                 var randomEntry = _characterProperties.ElementAt(r.Next(0, _characterProperties.Count - 1));
                 String randomKey = randomEntry.Key;
                 String randomValue = randomEntry.Value;
-                
+
                 _clues.Add("<b>" + randomKey + "</b>" + ": " + randomValue);
                 _characterProperties.Remove(randomKey);
                 _currentPointsAwarded--;
-                ScoreTrackerService.UpdateClueCounters("LOTR");
+                ScoreTrackerService.UpdateClueCounters("GOT");
                 StateHasChanged();
             }
             else
@@ -157,16 +179,16 @@ namespace DynamicPotterTrivia.Pages
         }
         private void GetHint()
         {
-            if (_hintCounter < _randomCharacter.name.ToString().Length + 1)
+            if (_hintCounter < _randomCharacter.Name.ToString().Length + 1)
             {
-                if (_randomCharacter.name.ToString()[_hintCounter - 1] == ' ')
+                if (_randomCharacter.Name.ToString()[_hintCounter - 1] == ' ')
                 {
                     _hintCounter++; //skip spaces when generating hints
                 }
-                _hintString = _randomCharacter.name.ToString().Substring(0, _hintCounter);
+                _hintString = _randomCharacter.Name.ToString().Substring(0, _hintCounter);
                 _hintCounter++;
                 _currentPointsAwarded--;
-                ScoreTrackerService.UpdateHintCounters("LOTR");
+                ScoreTrackerService.UpdateHintCounters("GOT");
             }
             else
             {
@@ -175,7 +197,7 @@ namespace DynamicPotterTrivia.Pages
         }
         private void ShowAnswer()
         {
-            Toaster.Add("The answer is " + _randomCharacter.name, MatToastType.Info, "Solution", "", config =>
+            Toaster.Add("The answer is " + _randomCharacter.Name, MatToastType.Info, "Solution", "", config =>
             {
                 config.ShowCloseButton = true;
                 config.ShowProgressBar = true;
@@ -193,8 +215,8 @@ namespace DynamicPotterTrivia.Pages
             {
                 _correctAnswer = true;
                 //currentScore = currentScore + _currentPointsAwarded;
-                ScoreTrackerService.AddToTotalScore(_currentPointsAwarded, "LOTR");
-                ScoreTrackerService.UpdateAnswerCounters("LOTR", true);
+                ScoreTrackerService.AddToTotalScore(_currentPointsAwarded, "GOT");
+                ScoreTrackerService.UpdateAnswerCounters("GOT", true);
                 StateHasChanged();
             }
             else
@@ -210,20 +232,10 @@ namespace DynamicPotterTrivia.Pages
                     config.RequireInteraction = true;
                 });
                 //currentScore--;
-                ScoreTrackerService.RemoveFromTotalScore(2, "LOTR");
-                ScoreTrackerService.UpdateAnswerCounters("LOTR", false);
+                ScoreTrackerService.RemoveFromTotalScore(2, "GOT");
+                ScoreTrackerService.UpdateAnswerCounters("GOT", false);
                 StateHasChanged();
             }
         }
-
-        //HELPER METHOD
-        private int NonNullPropertiesCount(object entity)
-        {
-            return entity.GetType()
-                         .GetProperties()
-                         .Select(x => x.GetValue(entity, null))
-                         .Count(v => v != null);
-        }
-
     }
 }
