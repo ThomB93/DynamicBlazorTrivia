@@ -16,12 +16,12 @@ namespace DynamicPotterTrivia.Models
         public List<string> Seats { get; set; }
         public string CurrentLord { get; set; }
         public string Heir { get; set; }
-        public Uri Overlord { get; set; }
+        public string Overlord { get; set; }
         public string Founded { get; set; }
         public string Founder { get; set; }
         public string DiedOut { get; set; }
         public List<string> AncestralWeapons { get; set; }
         public List<string> CadetBranches { get; set; }
-        public List<Uri> SwornMembers { get; set; }
+        public List<string> SwornMembers { get; set; }
     }
 }

@@ -1,0 +1,64 @@
+﻿@page "/gothouses"
+
+@using DynamicPotterTrivia.Models
+@using DynamicPotterTrivia.Services
+@inject HttpClient Http
+@inject IMatToaster Toaster
+@inject IScoreTrackerService ScoreTrackerService
+
+<MatThemeProvider Theme="@gotTheme">
+    <MatHeadline1>Game of Thrones Houses</MatHeadline1>
+    <MatBody1>Guess the house from the clues given! Use the fewest hints and clues possible to get the highest score!</MatBody1>
+    <MatBody1>Note that you must enter the full name of the house.</MatBody1>
+
+    @if (_characters == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+        <div class="mat-layout-grid">
+            <div class="mat-layout-grid-inner">
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+                    <!--Temporary element for showing answer-->
+                    <MatBody1><b>Answer:</b> @_randomHouse.Name</MatBody1>
+
+                    <MatButton Raised="true" @onclick="GetNewQuestion" Icon="navigate_next">New question</MatButton>
+
+                    <MatButton Outlined="true" @onclick="GetAnotherClue" Disabled="@_noMoreClues" Icon="search">Get clue</MatButton>
+                    <MatButton Outlined="true" @onclick="GetHint" Disabled="@_noMoreHints" Icon="search">Get hint</MatButton>
+
+                    <hr />
+
+                    <MatBody1><b>Hint:</b> @_hintString</MatBody1>
+
+                    <MatBody1><b>Current points awarded:</b> @_currentPointsAwarded</MatBody1>
+
+                    <p>
+                        <MatTextField @bind-Value="@_currentAnswer" Label="Place your answer here..."></MatTextField>
+                    </p>
+                    <MatButton Unelevated="true" @onclick="CheckAnswer" Icon="done">Answer!</MatButton>
+                    <MatButton Outlined="true" @onclick="ShowAnswer" Icon="priority_high">Show answer</MatButton>
+                </div>
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+                    <MatHeadline4>Character clues:</MatHeadline4>
+
+                    @foreach (var clue in _clues)
+                    {
+                        <MatBody1>@((MarkupString)clue)</MatBody1>
+                    }
+                </div>
+
+            </div>
+        </div>
+        <MatDialog @bind-IsOpen="@_correctAnswer">
+            <MatDialogTitle>Correct!</MatDialogTitle>
+            <MatDialogContent>
+                <MatBody1>Yes, @_currentAnswer is the correct answer!</MatBody1>
+            </MatDialogContent>
+            <MatDialogActions>
+                <MatButton OnClick="@GetNewQuestion">New Question</MatButton>
+            </MatDialogActions>
+        </MatDialog>
+    }
+</MatThemeProvider>
