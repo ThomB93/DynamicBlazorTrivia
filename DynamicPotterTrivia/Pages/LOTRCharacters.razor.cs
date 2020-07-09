@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
+using ChartJs.Blazor.Util;
 using DynamicPotterTrivia.Models;
 using MatBlazor;
 
@@ -225,5 +226,11 @@ namespace DynamicPotterTrivia.Pages
                          .Count(v => v != null);
         }
 
+        //MatBlazor Theme
+        MatTheme lotrTheme = new MatTheme()
+        {
+            Primary = ColorUtil.ColorHexString(203, 138, 49),
+            Secondary = MatThemeColors.Brown._400.Value
+        };
     }
 }

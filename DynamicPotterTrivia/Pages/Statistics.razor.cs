@@ -19,6 +19,11 @@ namespace DynamicPotterTrivia.Pages
 {
     public partial class Statistics
     {
+        //COLOR THEMES
+        //HP: ColorUtil.ColorHexString(116, 0, 1)
+        //LOTR: ColorUtil.ColorHexString(203, 138, 49)
+        //GOT: ColorUtil.ColorHexString(76, 137, 171)
+
         private PieConfig _PieConfigScoreByCategory;
         private ChartJsPieChart _pieChartJsScoreByCategory;
         private BarConfig _BarConfig;
@@ -27,6 +32,8 @@ namespace DynamicPotterTrivia.Pages
         private ChartJsRadarChart _radarChartJsHP;
         private RadarConfig _RadarConfigLOTR;
         private ChartJsRadarChart _radarChartJsLOTR;
+        private RadarConfig _RadarConfigGOT;
+        private ChartJsRadarChart _radarChartJsGOT;
 
         protected override void OnInitialized()
         {
@@ -49,11 +56,11 @@ namespace DynamicPotterTrivia.Pages
                 }
             };
 
-            _PieConfigScoreByCategory.Data.Labels.AddRange(new[] { "Harry Potter", "Lord of the Rings" });
+            _PieConfigScoreByCategory.Data.Labels.AddRange(new[] { "Harry Potter", "Lord of the Rings", "Game of Thrones" });
 
             var pieSet = new PieDataset
             {
-                BackgroundColor = new[] { ColorUtil.RandomColorString(), ColorUtil.RandomColorString()},
+                BackgroundColor = new[] { ColorUtil.ColorHexString(116, 0, 1), ColorUtil.ColorHexString(203, 138, 49), ColorUtil.ColorHexString(76, 137, 171)},
                 BorderWidth = 1,
                 //HoverBackgroundColor = ColorUtil.RandomColorString(),
                 //HoverBorderColor = ColorUtil.RandomColorString(),
@@ -61,7 +68,7 @@ namespace DynamicPotterTrivia.Pages
                 BorderColor = "#000000"
             };
 
-            pieSet.Data.AddRange(new double[] { ScoreTrackerService.GetTotalHPScore(), ScoreTrackerService.GetTotalLOTRScore()});
+            pieSet.Data.AddRange(new double[] { ScoreTrackerService.GetTotalHPScore(), ScoreTrackerService.GetTotalLOTRScore(), ScoreTrackerService.GetTotalGOTScore()});
             _PieConfigScoreByCategory.Data.Datasets.Add(pieSet);
             //end of pie chart config
 
@@ -104,19 +111,19 @@ namespace DynamicPotterTrivia.Pages
                     }
                 }
             };
-            _BarConfig.Data.Labels.AddRange(new [] {"HP Hints Used", "LOTR Hints Used", "HP Clues Used", "LOTR Clues Used"});
+            _BarConfig.Data.Labels.AddRange(new [] {"HP Hints Used", "LOTR Hints Used","GOT Hints Used", "HP Clues Used", "LOTR Clues Used", "GOT Clues Used"});
             var barDataset = new BarDataset<Int32Wrapper>
             {
-                BackgroundColor = new[] {ColorUtil.RandomColorString(), ColorUtil.RandomColorString(), ColorUtil.RandomColorString(), ColorUtil.RandomColorString() },
+                BackgroundColor = new[] { ColorUtil.ColorHexString(116, 0, 1), ColorUtil.ColorHexString(203, 138, 49), ColorUtil.ColorHexString(76, 137, 171), ColorUtil.ColorHexString(116, 0, 1), ColorUtil.ColorHexString(203, 138, 49), ColorUtil.ColorHexString(76, 137, 171) },
                 BorderWidth = 1,
                 //HoverBackgroundColor = ColorUtil.RandomColorString(),
                 //HoverBorderColor = ColorUtil.RandomColorString(),
-                //HoverBorderWidth = 1,
+                //HoverBorderWidth = 1
                 BorderColor = "#000000",
                 Label = "Use of Hints & Clues"
             };
 
-            barDataset.AddRange(new Int32Wrapper[] {ScoreTrackerService.GetHPHintsUsed(), ScoreTrackerService.GetLOTRHintsUsed(), ScoreTrackerService.GetHPCluesUsed(), ScoreTrackerService.GetLOTRCluesUsed()});
+            barDataset.AddRange(new Int32Wrapper[] {ScoreTrackerService.GetHPHintsUsed(), ScoreTrackerService.GetLOTRHintsUsed(), ScoreTrackerService.GetGOTHintsUsed(), ScoreTrackerService.GetHPCluesUsed(), ScoreTrackerService.GetLOTRCluesUsed(), ScoreTrackerService.GetGOTCluesUsed()});
             _BarConfig.Data.Datasets.Add(barDataset);
             //end of bar chart config
 
@@ -137,7 +144,7 @@ namespace DynamicPotterTrivia.Pages
             RadarDataset dataset_hp = new RadarDataset
             {
                 //Label = $"Participant {_RadarConfigHP.Data.Datasets.Count + 1}",
-                BorderColor = ColorUtil.RandomColorString(),
+                BorderColor = ColorUtil.ColorHexString(116, 0, 1),
                 BorderWidth = 1,
                 Data = new List<double>()
             };
@@ -169,7 +176,7 @@ namespace DynamicPotterTrivia.Pages
             RadarDataset dataset_lotr = new RadarDataset
             {
                 //Label = $"Participant {_RadarConfigHP.Data.Datasets.Count + 1}",
-                BorderColor = ColorUtil.RandomColorString(),
+                BorderColor = ColorUtil.ColorHexString(203, 138, 49),
                 BorderWidth = 1,
                 Data = new List<double>()
             };
@@ -182,7 +189,39 @@ namespace DynamicPotterTrivia.Pages
 
             dataset_lotr.Data.AddRange(radarDataLOTR);
             _RadarConfigLOTR.Data.Datasets.Add(dataset_lotr);
-            //end of HP radar config
+            //end of LOTR radar config
+
+            //start of GOT radar config
+            _RadarConfigGOT = new RadarConfig
+            {
+                Options = new RadarOptions
+                {
+                    Title = new OptionsTitle
+                    {
+                        Display = true,
+                        Text = "Game of Thrones Data"
+                    },
+                    Responsive = true
+                }
+            };
+            _RadarConfigGOT.Data.Labels.AddRange(new string[] { "Score", "Hints Used", "Clues Used", "Correct Answers", "Wrong Answers" });
+            RadarDataset dataset_got = new RadarDataset
+            {
+                //Label = $"Participant {_RadarConfigHP.Data.Datasets.Count + 1}",
+                BorderColor = ColorUtil.ColorHexString(76, 137, 171),
+                BorderWidth = 1,
+                Data = new List<double>()
+            };
+            double[] radarDataGOT = new double[5]
+            {
+                ScoreTrackerService.GetTotalGOTScore(), ScoreTrackerService.GetGOTHintsUsed(),
+                ScoreTrackerService.GetGOTCluesUsed(), ScoreTrackerService.GetGOTCorrectAnswers(),
+                ScoreTrackerService.GetGOTWrongAnswers()
+            };
+
+            dataset_got.Data.AddRange(radarDataGOT);
+            _RadarConfigGOT.Data.Datasets.Add(dataset_got);
+            //end of GOT radar config
         }
     }
 }

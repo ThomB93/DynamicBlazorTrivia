@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using ChartJs.Blazor.Util;
 using DynamicPotterTrivia.Models;
 using MatBlazor;
 
@@ -104,5 +105,10 @@ namespace DynamicPotterTrivia.Pages
                 noMoreHints = true;
             }
         }
+        MatTheme hpTheme = new MatTheme()
+        {
+            Primary = ColorUtil.ColorHexString(116, 0, 1),
+            Secondary = MatThemeColors.Brown._400.Value
+        };
     }
 }

@@ -5,53 +5,55 @@
 @inject IMatToaster Toaster
 @inject IScoreTrackerService ScoreTrackerService
 
-<MatHeadline1>Harry Potter Spells</MatHeadline1>
-<MatBody1>Guess the spell from the given description and type! Use the fewest hints possible to get the highest score!</MatBody1>
 
-@if (spells == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-<div class="mat-layout-grid">
-    <div class="mat-layout-grid-inner">
-        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+<MatThemeProvider Theme="@hpTheme">
+    <MatHeadline1>Harry Potter Spells</MatHeadline1>
+    <MatBody1>Guess the spell from the given description and type! Use the fewest hints possible to get the highest score!</MatBody1>
+
+    @if (spells == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+        <div class="mat-layout-grid">
+            <div class="mat-layout-grid-inner">
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+
+                    <MatButton Raised="true" @onclick="GetNewQuestion" Icon="navigate_next">New question</MatButton>
+                    <MatButton Outlined="true" @onclick="GetHint" Icon="search" Disabled="@noMoreHints">Get hint</MatButton>
+
+                    <hr />
+
+                    <MatBody1><b>Hint:</b> @hintString</MatBody1>
+
+                    <MatBody1><b>Current Points Awarded:</b> @currentPointsAwarded</MatBody1>
+
+                    <p>
+                        <MatTextField @bind-Value="@currentAnswer" Label="Place your answer here..."></MatTextField>
+                    </p>
+
+                    <MatButton Unelevated="true" @onclick="CheckAnswer" Icon="done">Answer!</MatButton>
+                    <MatButton Outlined="true" @onclick="ShowAnswer" Icon="priority_high">Show answer</MatButton>
 
 
-            <MatButton Raised="true" @onclick="GetNewQuestion" Icon="navigate_next">New question</MatButton>
-            <MatButton Outlined="true" @onclick="GetHint" Icon="search" Disabled="@noMoreHints">Get hint</MatButton>
-
-            <hr />
-
-            <MatBody1><b>Hint:</b> @hintString</MatBody1>
-
-            <MatBody1><b>Current Points Awarded:</b> @currentPointsAwarded</MatBody1>
-
-            <p>
-                <MatTextField @bind-Value="@currentAnswer" Label="Place your answer here..."></MatTextField>
-            </p>
-
-            <MatButton Unelevated="true" @onclick="CheckAnswer" Icon="done">Answer!</MatButton>
-            <MatButton Outlined="true" @onclick="ShowAnswer" Icon="done">Show answer</MatButton>
-
-
+                </div>
+                <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
+                    <MatHeadline5><b>Description:</b> @randomSpell.effect</MatHeadline5>
+                    <MatHeadline5><b>Type:</b> @randomSpell.type</MatHeadline5>
+                </div>
+            </div>
         </div>
-        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
-            <MatHeadline5><b>Description:</b> @randomSpell.effect</MatHeadline5>
-            <MatHeadline5><b>Type:</b> @randomSpell.type</MatHeadline5>
-        </div>
-        </div>
-    </div>
-    
 
-    <MatDialog @bind-IsOpen="@correctAnswer">
-        <MatDialogTitle>Correct!</MatDialogTitle>
-        <MatDialogContent>
-            <MatBody1>Yes, @currentAnswer is the correct answer!</MatBody1>
-        </MatDialogContent>
-        <MatDialogActions>
-            <MatButton OnClick="@GetNewQuestion">New Question</MatButton>
-        </MatDialogActions>
-    </MatDialog>
-}
+
+        <MatDialog @bind-IsOpen="@correctAnswer">
+            <MatDialogTitle>Correct!</MatDialogTitle>
+            <MatDialogContent>
+                <MatBody1>Yes, @currentAnswer is the correct answer!</MatBody1>
+            </MatDialogContent>
+            <MatDialogActions>
+                <MatButton OnClick="@GetNewQuestion">New Question</MatButton>
+            </MatDialogActions>
+        </MatDialog>
+    }
+</MatThemeProvider>

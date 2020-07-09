@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using ChartJs.Blazor.Util;
 using DynamicPotterTrivia.Models;
 using MatBlazor;
 
@@ -12,6 +13,7 @@ namespace DynamicPotterTrivia.Pages
     {
         private GotCharacter[] _characters;
         private GotCharacter _randomCharacter;
+        private GotHouse[] _houses;
 
         private string _characterName = "";
         private string _currentAnswer = "";
@@ -34,6 +36,7 @@ namespace DynamicPotterTrivia.Pages
         {
             //fetch all _characters
             _characters = await Http.GetFromJsonAsync<GotCharacter[]>("jsonData/got_characters.json");
+            _houses = await Http.GetFromJsonAsync<GotHouse[]>("jsonData/got_houses.json");
             _clues = new List<string>();
             _characterProperties = new Dictionary<string, string>();
             //select a random character as first question
@@ -42,8 +45,13 @@ namespace DynamicPotterTrivia.Pages
 
         private string GetCharacterNameFromUrl(string url)
         {
+            return _characters.FirstOrDefault(c => c.Url == url)?.Name;
+        }
+
+        private string GetHouseNameFromUrl(string url)
+        {
             string name;
-            name = _characters.FirstOrDefault(c => c.Url == url)?.Name;
+            name = _houses.FirstOrDefault(c => c.Url == url)?.Name;
             if (name != null)
             {
                 return name;
@@ -109,28 +117,39 @@ namespace DynamicPotterTrivia.Pages
                     }
                 }
             }
-            Console.WriteLine("Adding family relations");
+            if (_randomCharacter.Allegiances.Count > 0)
+            {
+                for (int i = 0; i < _randomCharacter.Aliases.Count; i++)
+                {
+                    _characterProperties.Add("Allegiance " + (i + 1), GetHouseNameFromUrl(_randomCharacter.Allegiances[i]));
+                }
+            }
+            //Console.WriteLine("Adding family relations");
             if (_randomCharacter.Father != null)
             {
                 _characterProperties.Add("Father", GetCharacterNameFromUrl(_randomCharacter.Father));
             }
-            Console.WriteLine("Added father relations");
+            //Console.WriteLine("Father: " + GetCharacterNameFromUrl(_randomCharacter.Father));
+            //Console.WriteLine("Added father relations");
             if (_randomCharacter.Mother != null)
             {
                 _characterProperties.Add("Mother", GetCharacterNameFromUrl(_randomCharacter.Mother));
             }
+            //Console.WriteLine("Mother: " + GetCharacterNameFromUrl(_randomCharacter.Mother));
+            //Console.WriteLine("Adding spouse relations");
             if (_randomCharacter.Spouse != null)
             {
-                _characterProperties.Add("Spouse", GetCharacterNameFromUrl(_randomCharacter.Spouse));
+                string spouse = GetCharacterNameFromUrl(_randomCharacter.Spouse);
+                _characterProperties.Add("Spouse", spouse);
             }
-            Console.WriteLine("Added family relations");
+            //Console.WriteLine("Spouse: " + GetCharacterNameFromUrl(_randomCharacter.Spouse));
 
             //remove empty _clues
             List<string> cluesToRemove = new List<string>();
 
             foreach (var entry in _characterProperties)
             {
-                if (entry.Value == "")
+                if (entry.Value == "" || entry.Value == string.Empty || entry.Value == null)
                 {
                     cluesToRemove.Add(entry.Key);
                 }
@@ -142,23 +161,23 @@ namespace DynamicPotterTrivia.Pages
             }
 
             //check if there are enough _clues after removing empty _clues
-            if (!(_characterProperties.Count >= 3))
+            if (!(_characterProperties.Count >= 4))
             {
                 GetNewQuestion();
             }
             else
             {
+                //set the character name(correct answer)
+                _characterName = _randomCharacter.Name.ToLower();
                 //Show starting _clues for question
                 GetAnotherClue();
                 GetAnotherClue();
-                //set the character name(correct answer)
-                _characterName = _randomCharacter.Name.ToLower();
             }
         }
         private void GetAnotherClue()
         {
             Console.WriteLine("Get Another Clue");
-            if (_characterProperties.Count > 1)
+            if (_characterProperties.Count >= 1)
             {
                 var randomEntry = _characterProperties.ElementAt(r.Next(0, _characterProperties.Count - 1));
                 String randomKey = randomEntry.Key;
@@ -237,5 +256,11 @@ namespace DynamicPotterTrivia.Pages
                 StateHasChanged();
             }
         }
+        //MatBlazor theme
+        MatTheme gotTheme = new MatTheme()
+        {
+            Primary = ColorUtil.ColorHexString(76, 137, 171),
+            Secondary = MatThemeColors.BlueGrey._400.Value
+        };
     }
 }

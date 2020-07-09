@@ -271,13 +271,14 @@ namespace DynamicPotterTrivia.Services
         public string GenerateExportStringFromPropertyValues()
         {
             return
-                "TotalScore=" + TotalScore + "\nHPScore=" + HPScore + "\nLOTRScore=" + LOTRScore +
+                "TotalScore=" + TotalScore + "\nHPScore=" + HPScore + "\nLOTRScore=" + LOTRScore + "\nGOTScore=" + GOTScore +
                 "\nTotalHintsUsed=" + TotalHintsUsed + "\nHPHintsUsed=" + HPHintsUsed + "\nLOTRHintsUsed=" +
-                LOTRHintsUsed + "\nTotalCluesUsed=" + TotalCluesUsed + "\nHPCluesUsed=" + HPCluesUsed +
-                "\nLOTRCluesUsed=" + LOTRCluesUsed + "\nTotalCorrectAnswers=" + TotalCorrectAnswers +
+                LOTRHintsUsed + "\nGOTHintsUsed=" +
+                GOTHintsUsed + "\nTotalCluesUsed=" + TotalCluesUsed + "\nHPCluesUsed=" + HPCluesUsed +
+                "\nLOTRCluesUsed=" + LOTRCluesUsed + "\nGOTCluesUsed=" + GOTCluesUsed + "\nTotalCorrectAnswers=" + TotalCorrectAnswers +
                 "\nTotalWrongAnswers=" + TotalWrongAnswers + "\nCorrectHPAnswers=" + CorrectHPAnswers +
-                "\nCorrectLOTRAnswers=" + CorrectLOTRAnswers + "\nWrongHPAnswers=" + WrongHPAnswers +
-                "\nWrongLOTRAnswers=" + WrongLOTRAnswers;
+                "\nCorrectLOTRAnswers=" + CorrectLOTRAnswers + "\nCorrectGOTAnswers=" + CorrectGOTAnswers + "\nWrongHPAnswers=" + WrongHPAnswers +
+                "\nWrongLOTRAnswers=" + WrongLOTRAnswers + "\nWrongGOTAnswers=" + WrongGOTAnswers;
         }
 
         public void UpdateScoresFromImport(Dictionary<string, string> importedScores)
@@ -296,11 +297,17 @@ namespace DynamicPotterTrivia.Services
                     case "LOTRScore":
                         LOTRScore = Convert.ToInt32(entry.Value);
                         break;
+                    case "GOTScore":
+                        GOTScore = Convert.ToInt32(entry.Value);
+                        break;
                     case "TotalHintsUsed":
                         TotalHintsUsed = Convert.ToInt32(entry.Value);
                         break;
                     case "LOTRHintsUsed":
                         LOTRHintsUsed = Convert.ToInt32(entry.Value);
+                        break;
+                    case "GOTHintsUsed":
+                        GOTHintsUsed = Convert.ToInt32(entry.Value);
                         break;
                     case "TotalCluesUsed":
                         TotalCluesUsed = Convert.ToInt32(entry.Value);
@@ -310,6 +317,9 @@ namespace DynamicPotterTrivia.Services
                         break;
                     case "LOTRCluesUsed":
                         LOTRCluesUsed = Convert.ToInt32(entry.Value);
+                        break;
+                    case "GOTCluesUsed":
+                        GOTCluesUsed = Convert.ToInt32(entry.Value);
                         break;
                     case "TotalCorrectAnswers":
                         TotalCorrectAnswers = Convert.ToInt32(entry.Value);
@@ -323,11 +333,17 @@ namespace DynamicPotterTrivia.Services
                     case "CorrectLOTRAnswers":
                         CorrectLOTRAnswers = Convert.ToInt32(entry.Value);
                         break;
+                    case "CorrectGOTAnswers":
+                        CorrectGOTAnswers = Convert.ToInt32(entry.Value);
+                        break;
                     case "WrongHPAnswers":
                         WrongHPAnswers = Convert.ToInt32(entry.Value);
                         break;
                     case "WrongLOTRAnswers":
                         WrongLOTRAnswers = Convert.ToInt32(entry.Value);
+                        break;
+                    case "WrongGOTAnswers":
+                        WrongGOTAnswers = Convert.ToInt32(entry.Value);
                         break;
                 }
             }

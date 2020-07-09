@@ -18,7 +18,7 @@ namespace DynamicPotterTrivia.Models
         public string Father { get; set; }
         public string Mother { get; set; }
         public string Spouse { get; set; }
-        public List<Uri> Allegiances { get; set; }
+        public List<string> Allegiances { get; set; }
         public List<Uri> Books { get; set; }
         public List<Uri> PovBooks { get; set; }
         public List<string> TvSeries { get; set; }

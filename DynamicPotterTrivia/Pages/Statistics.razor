@@ -151,6 +151,66 @@
             </div>
         </div>
         <MatHeadline3>Lord of the Rings</MatHeadline3>
+    <div class="mat-layout-grid">
+        <div class="mat-layout-grid-inner">
+            <div class="mat-layout-grid-cell">
+                <MatCard class="demo-mat-card">
+                    <MatCardContent>
+                        <div class="demo-mat-card-content">
+                            <MatHeadline6 class="demo-mat-card-clean-margin">
+                                Score: @ScoreTrackerService.GetTotalLOTRScore()
+                            </MatHeadline6>
+                        </div>
+                    </MatCardContent>
+                </MatCard>
+            </div>
+            <div class="mat-layout-grid-cell">
+                <MatCard class="demo-mat-card">
+                    <MatCardContent>
+                        <div class="demo-mat-card-content">
+                            <MatHeadline6 class="demo-mat-card-clean-margin">
+                                Correct: @ScoreTrackerService.GetLOTRCorrectAnswers()
+                            </MatHeadline6>
+                        </div>
+                    </MatCardContent>
+                </MatCard>
+            </div>
+            <div class="mat-layout-grid-cell">
+                <MatCard class="demo-mat-card">
+                    <MatCardContent>
+                        <div class="demo-mat-card-content">
+                            <MatHeadline6 class="demo-mat-card-clean-margin">
+                                Wrong: @ScoreTrackerService.GetLOTRWrongAnswers()
+                            </MatHeadline6>
+                        </div>
+                    </MatCardContent>
+                </MatCard>
+            </div>
+            <div class="mat-layout-grid-cell">
+                <MatCard class="demo-mat-card">
+                    <MatCardContent>
+                        <div class="demo-mat-card-content">
+                            <MatHeadline6 class="demo-mat-card-clean-margin">
+                                Clues used: @ScoreTrackerService.GetLOTRCluesUsed()
+                            </MatHeadline6>
+                        </div>
+                    </MatCardContent>
+                </MatCard>
+            </div>
+            <div class="mat-layout-grid-cell">
+                <MatCard class="demo-mat-card">
+                    <MatCardContent>
+                        <div class="demo-mat-card-content">
+                            <MatHeadline6 class="demo-mat-card-clean-margin">
+                                Hints used: @ScoreTrackerService.GetLOTRHintsUsed()
+                            </MatHeadline6>
+                        </div>
+                    </MatCardContent>
+                </MatCard>
+            </div>
+        </div>
+    </div>
+    <MatHeadline3>Game of Thrones</MatHeadline3>
         <div class="mat-layout-grid">
             <div class="mat-layout-grid-inner">
                 <div class="mat-layout-grid-cell">
@@ -158,7 +218,7 @@
                         <MatCardContent>
                             <div class="demo-mat-card-content">
                                 <MatHeadline6 class="demo-mat-card-clean-margin">
-                                    Score: @ScoreTrackerService.GetTotalLOTRScore()
+                                    Score: @ScoreTrackerService.GetTotalGOTScore()
                                 </MatHeadline6>
                             </div>
                         </MatCardContent>
@@ -169,7 +229,7 @@
                         <MatCardContent>
                             <div class="demo-mat-card-content">
                                 <MatHeadline6 class="demo-mat-card-clean-margin">
-                                    Correct: @ScoreTrackerService.GetLOTRCorrectAnswers()
+                                    Correct: @ScoreTrackerService.GetGOTCorrectAnswers()
                                 </MatHeadline6>
                             </div>
                         </MatCardContent>
@@ -180,7 +240,7 @@
                         <MatCardContent>
                             <div class="demo-mat-card-content">
                                 <MatHeadline6 class="demo-mat-card-clean-margin">
-                                    Wrong: @ScoreTrackerService.GetLOTRWrongAnswers()
+                                    Wrong: @ScoreTrackerService.GetGOTWrongAnswers()
                                 </MatHeadline6>
                             </div>
                         </MatCardContent>
@@ -191,7 +251,7 @@
                         <MatCardContent>
                             <div class="demo-mat-card-content">
                                 <MatHeadline6 class="demo-mat-card-clean-margin">
-                                    Clues used: @ScoreTrackerService.GetLOTRCluesUsed()
+                                    Clues used: @ScoreTrackerService.GetGOTCluesUsed()
                                 </MatHeadline6>
                             </div>
                         </MatCardContent>
@@ -202,7 +262,7 @@
                         <MatCardContent>
                             <div class="demo-mat-card-content">
                                 <MatHeadline6 class="demo-mat-card-clean-margin">
-                                    Hints used: @ScoreTrackerService.GetLOTRHintsUsed()
+                                    Hints used: @ScoreTrackerService.GetGOTHintsUsed()
                                 </MatHeadline6>
                             </div>
                         </MatCardContent>
@@ -218,17 +278,24 @@
             <div class="col-md-6">
                 <ChartJsRadarChart @ref="_radarChartJsHP"
                                    Config="@_RadarConfigHP"
-                                   Width="600"
-                                   Height="400" />
+                                   Width="650"
+                                   Height="450" />
             </div>
             <div class="col-md-6">
                 <ChartJsRadarChart @ref="_radarChartJsLOTR"
                                    Config="@_RadarConfigLOTR"
-                                   Width="600"
-                                   Height="400" />
+                                   Width="650"
+                                   Height="450" />
             </div>
         </div>
-
+        <div class="row">
+            <div class="col-md-6">
+                <ChartJsRadarChart @ref="_radarChartJsGOT"
+                                    Config="@_RadarConfigGOT"
+                                    Width="650"
+                                    Height="450" />
+            </div>
+        </div>
 
     </div>
 </div>
