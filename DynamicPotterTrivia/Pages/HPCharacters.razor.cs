@@ -17,15 +17,15 @@ namespace DynamicPotterTrivia.Pages
         private string characterName = "";
         private string currentAnswer = "";
 
-        bool correctAnswer = false;
+        bool correctAnswer;
 
         private Dictionary<string, string> characterProperties;
         private List<string> clues = new List<string>();
-        private bool noMoreClues = false;
+        private bool noMoreClues;
 
         private int hintCounter = 1;
         private string hintString = "";
-        private bool noMoreHints = false;
+        private bool noMoreHints;
 
         Random r = new Random();
 

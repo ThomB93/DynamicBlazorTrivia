@@ -22,11 +22,11 @@ namespace DynamicPotterTrivia.Pages
 
         private Dictionary<string, string> _characterProperties;
         private List<string> _clues;
-        private bool _noMoreClues = false;
+        private bool _noMoreClues;
 
         private int _hintCounter = 1;
         private string _hintString = "";
-        private bool _noMoreHints = false;
+        private bool _noMoreHints;
 
         Random r = new Random();
 

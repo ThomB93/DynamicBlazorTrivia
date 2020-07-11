@@ -23,11 +23,11 @@ namespace DynamicPotterTrivia.Pages
 
         private int _hintCounter = 1;
         private string _hintString = "";
-        private bool _noMoreHints = false;
+        private bool _noMoreHints;
 
         Random r = new Random();
 
-        private int _currentPointsAwarded = 0;
+        private int _currentPointsAwarded;
 
         protected override async Task OnInitializedAsync()
         {
@@ -130,6 +130,13 @@ namespace DynamicPotterTrivia.Pages
                     if (_characterName.ToLower() == "peregrin took")
                     {
                         _characterName = "pippin";
+                    }
+
+                    break;
+                case "bilbo":
+                    if (_characterName.ToLower() == "bilbo baggins")
+                    {
+                        _characterName = "bilbo";
                     }
 
                     break;

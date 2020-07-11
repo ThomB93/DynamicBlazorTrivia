@@ -21,7 +21,7 @@
             <div class="mat-layout-grid-inner">
                 <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
                     <!--Temporary element for showing answer-->
-                    <MatBody1><b>Answer:</b> @_randomHouse.Name</MatBody1>
+                    @*<MatBody1><b>Answer:</b> @_randomHouse.Name</MatBody1>*@
 
                     <MatButton Raised="true" @onclick="GetNewQuestion" Icon="navigate_next">New question</MatButton>
 
@@ -41,7 +41,7 @@
                     <MatButton Outlined="true" @onclick="ShowAnswer" Icon="priority_high">Show answer</MatButton>
                 </div>
                 <div class="mat-layout-grid-cell mat-layout-grid-cell-span-6">
-                    <MatHeadline4>Character clues:</MatHeadline4>
+                    <MatHeadline4>House clues:</MatHeadline4>
 
                     @foreach (var clue in _clues)
                     {

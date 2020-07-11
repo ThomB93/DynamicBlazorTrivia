@@ -22,11 +22,11 @@ namespace DynamicPotterTrivia.Pages
 
         private Dictionary<string, string> _houseProperties;
         private List<string> _clues;
-        private bool _noMoreClues = false;
+        private bool _noMoreClues;
 
         private int _hintCounter = 6;
         private string _hintString = "House";
-        private bool _noMoreHints = false;
+        private bool _noMoreHints;
 
         Random r = new Random();
 
@@ -127,7 +127,7 @@ namespace DynamicPotterTrivia.Pages
                 _houseProperties.Add("Founder", GetCharacterNameFromUrl(_randomHouse.Founder));
             }
 
-            //remove empty _clues
+            //remove empty clues
             List<string> cluesToRemove = new List<string>();
 
             foreach (var entry in _houseProperties)
@@ -143,7 +143,7 @@ namespace DynamicPotterTrivia.Pages
                 _houseProperties.Remove(entry);
             }
 
-            //check if there are enough _clues after removing empty _clues
+            //check if there are enough clues after removing empty clues
             if (!(_houseProperties.Count >= 4))
             {
                 GetNewQuestion();
