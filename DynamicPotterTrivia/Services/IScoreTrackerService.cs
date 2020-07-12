@@ -7,6 +7,10 @@ namespace DynamicPotterTrivia.Services
 {
     public interface IScoreTrackerService
     {
+        //RANK
+        public string GetCurrentRank();
+
+        public void UpdateRankBasedOnCurrentScore();
         //SCORE
         public void AddToTotalScore(int score, string category);
         public void RemoveFromTotalScore(int score, string category);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace DynamicPotterTrivia.Services
@@ -8,10 +9,10 @@ namespace DynamicPotterTrivia.Services
     public class ScoreTrackerService : IScoreTrackerService
     {
         //SCORE PROPERTIES
-        private int TotalScore { get; set; } = 30;
-        private int HPScore { get; set; } = 10;
-        private int LOTRScore { get; set; } = 20;
-        private int GOTScore { get; set; } = 20;
+        private int TotalScore { get; set; } 
+        private int HPScore { get; set; } 
+        private int LOTRScore { get; set; } 
+        private int GOTScore { get; set; } 
         //HINT PROPERTIES
         private int TotalHintsUsed { get; set; }
         private int HPHintsUsed { get; set; }
@@ -23,8 +24,8 @@ namespace DynamicPotterTrivia.Services
         private int LOTRCluesUsed { get; set; }
         private int GOTCluesUsed { get; set; }
         //ANSWERS PROPERTIES
-        private int TotalCorrectAnswers { get; set; } = 5;
-        private int TotalWrongAnswers { get; set; } = 3;
+        private int TotalCorrectAnswers { get; set; } 
+        private int TotalWrongAnswers { get; set; } 
         private int CorrectHPAnswers { get; set; }
         private int CorrectLOTRAnswers { get; set; }
         private int CorrectGOTAnswers { get; set; }
@@ -34,8 +35,48 @@ namespace DynamicPotterTrivia.Services
 
         //may be implemented later
         public int Level { get; set; }
+        public string CurrentRank { get; set; } = "Hobbit";
+        private Dictionary<string, List<int>> rankings;
 
         public event Action OnChange;
+
+        public ScoreTrackerService()
+        {
+            rankings = new Dictionary<string, List<int>>()
+            {
+                {"Hogwarts Student", Enumerable.Range(10, 15).ToList()},
+                {"Ringbearer", Enumerable.Range(25, 25).ToList()},
+                {"Warden of the North", Enumerable.Range(50, 25).ToList()},
+                {"Minister of Magic", Enumerable.Range(75, 25).ToList()},
+                {"Steward of Gondor", Enumerable.Range(100, 50).ToList()},
+                {"Archmaester", Enumerable.Range(150, 50).ToList()},
+                {"Quidditch Captain", Enumerable.Range(200, 100).ToList()},
+                {"King of the West", Enumerable.Range(300, 1000).ToList()},
+            };
+            
+        }
+
+        //RANK METHODS
+        public void UpdateRankBasedOnCurrentScore()
+        {
+            if (TotalScore < 10)
+            {
+                CurrentRank = "Hobbit";
+                return;
+            }
+
+            foreach (var entry in rankings)
+            {
+                if (entry.Value.Contains(TotalScore))
+                {
+                    CurrentRank = entry.Key;
+                    Console.WriteLine(entry.Value.Count);
+                    Console.WriteLine(TotalScore);
+                    Console.WriteLine(entry.Key);
+                    return;
+                }
+            }
+        }
 
         //SCORE METHODS
         public void AddToTotalScore(int score, string category)
@@ -64,6 +105,11 @@ namespace DynamicPotterTrivia.Services
 
         public void RemoveFromTotalScore(int score, string category)
         {
+            if (TotalScore < 1)
+            {
+                TotalScore = 0;
+                return;
+            }
             switch (category)
             {
                 case "HP":
@@ -175,6 +221,11 @@ namespace DynamicPotterTrivia.Services
         }
 
         //GET Methods
+        //RANK
+        public string GetCurrentRank()
+        {
+            return CurrentRank;
+        }
         //SCORE
         public int GetTotalScore()
         {

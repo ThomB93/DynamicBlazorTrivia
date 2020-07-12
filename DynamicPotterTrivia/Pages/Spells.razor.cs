@@ -40,6 +40,7 @@ namespace DynamicPotterTrivia.Pages
                 //currentScore = currentScore + 10;
                 ScoreTrackerService.AddToTotalScore(currentPointsAwarded, "HP");
                 ScoreTrackerService.UpdateAnswerCounters("HP", true);
+                ScoreTrackerService.UpdateRankBasedOnCurrentScore();
             }
             else
             {
@@ -55,6 +56,7 @@ namespace DynamicPotterTrivia.Pages
                 });
                 ScoreTrackerService.RemoveFromTotalScore(2, "HP");
                 ScoreTrackerService.UpdateAnswerCounters("HP", false);
+                ScoreTrackerService.UpdateRankBasedOnCurrentScore();
             }
         }
 
@@ -89,6 +91,23 @@ namespace DynamicPotterTrivia.Pages
 
         private void GetHint()
         {
+            //do not allow more hints of current points will go into negative
+            if (currentPointsAwarded < 1)
+            {
+                noMoreHints = true;
+                Toaster.Add("No more hints allowed!", MatToastType.Danger, "Sorry", "", config =>
+                {
+                    config.ShowCloseButton = true;
+                    config.ShowProgressBar = true;
+                    config.ShowTransitionDuration = Convert.ToInt32(false);
+                    config.VisibleStateDuration = Convert.ToInt32(true);
+                    config.HideTransitionDuration = Convert.ToInt32(true);
+
+                    config.RequireInteraction = true;
+                });
+                return;
+            }
+
             if (hintCounter < randomSpell.spell.Length + 1)
             {
                 if (randomSpell.spell[hintCounter - 1] == ' ') //skip spaces when generating hints

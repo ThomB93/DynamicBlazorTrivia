@@ -54,7 +54,7 @@
         <MatDialog @bind-IsOpen="@_correctAnswer">
             <MatDialogTitle>Correct!</MatDialogTitle>
             <MatDialogContent>
-                <MatBody1>Yes, @_currentAnswer is the correct answer!</MatBody1>
+                <MatBody1>Yes, @_currentAnswer is the correct answer! Click <a href="https://gameofthrones.fandom.com/wiki/@_randomCharacter.Name">here</a> to learn more about the character.</MatBody1>
             </MatDialogContent>
             <MatDialogActions>
                 <MatButton OnClick="@GetNewQuestion">New Question</MatButton>

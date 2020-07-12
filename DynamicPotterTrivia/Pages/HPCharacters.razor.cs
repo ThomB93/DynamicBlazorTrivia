@@ -48,6 +48,7 @@ namespace DynamicPotterTrivia.Pages
                 //currentScore = currentScore + currentPointsAwarded;
                 ScoreTrackerService.AddToTotalScore(currentPointsAwarded, "HP");
                 ScoreTrackerService.UpdateAnswerCounters("HP", true);
+                ScoreTrackerService.UpdateRankBasedOnCurrentScore();
                 StateHasChanged();
             }
             else
@@ -65,6 +66,7 @@ namespace DynamicPotterTrivia.Pages
                 //currentScore--;
                 ScoreTrackerService.RemoveFromTotalScore(2, "HP");
                 ScoreTrackerService.UpdateAnswerCounters("HP", false);
+                ScoreTrackerService.UpdateRankBasedOnCurrentScore();
                 StateHasChanged();
             }
         }
@@ -140,6 +142,21 @@ namespace DynamicPotterTrivia.Pages
         }
         private void GetAnotherClue()
         {
+            if (currentPointsAwarded < 1)
+            {
+                noMoreClues = true;
+                Toaster.Add("No more clues allowed!", MatToastType.Danger, "Sorry", "", config =>
+                {
+                    config.ShowCloseButton = true;
+                    config.ShowProgressBar = true;
+                    config.ShowTransitionDuration = Convert.ToInt32(false);
+                    config.VisibleStateDuration = Convert.ToInt32(true);
+                    config.HideTransitionDuration = Convert.ToInt32(true);
+
+                    config.RequireInteraction = true;
+                });
+                return;
+            }
             if (characterProperties.Count > 1)
             {
                 var randomEntry = characterProperties.ElementAt(r.Next(0, characterProperties.Count - 1));
@@ -161,6 +178,23 @@ namespace DynamicPotterTrivia.Pages
 
         public void GetHint()
         {
+            //do not allow more hints of current points will go into negative
+            if (currentPointsAwarded < 1)
+            {
+                noMoreHints = true;
+                Toaster.Add("No more hints allowed!", MatToastType.Danger, "Sorry", "", config =>
+                {
+                    config.ShowCloseButton = true;
+                    config.ShowProgressBar = true;
+                    config.ShowTransitionDuration = Convert.ToInt32(false);
+                    config.VisibleStateDuration = Convert.ToInt32(true);
+                    config.HideTransitionDuration = Convert.ToInt32(true);
+
+                    config.RequireInteraction = true;
+                });
+                return;
+            }
+
             if (hintCounter < randomCharacter.name.Length + 1)
             {
                 if (randomCharacter.name[hintCounter - 1] == ' ')

@@ -63,6 +63,23 @@ namespace DynamicPotterTrivia.Pages
         }
         private void GetHint()
         {
+            //do not allow more hints of current points will go into negative
+            if (_currentPointsAwarded < 1)
+            {
+                _noMoreHints = true;
+                Toaster.Add("No more hints allowed!", MatToastType.Danger, "Sorry", "", config =>
+                {
+                    config.ShowCloseButton = true;
+                    config.ShowProgressBar = true;
+                    config.ShowTransitionDuration = Convert.ToInt32(false);
+                    config.VisibleStateDuration = Convert.ToInt32(true);
+                    config.HideTransitionDuration = Convert.ToInt32(true);
+
+                    config.RequireInteraction = true;
+                });
+                return;
+            }
+
             if (_hintCounter < _characterName.Length + 1)
             {
                 if (_characterName[_hintCounter - 1] == ' ')
@@ -148,6 +165,7 @@ namespace DynamicPotterTrivia.Pages
                 //currentScore = currentScore + _currentPointsAwarded;
                 ScoreTrackerService.AddToTotalScore(_currentPointsAwarded, "LOTR");
                 ScoreTrackerService.UpdateAnswerCounters("LOTR", true);
+                ScoreTrackerService.UpdateRankBasedOnCurrentScore();
                 StateHasChanged();
             }
             else
@@ -165,6 +183,7 @@ namespace DynamicPotterTrivia.Pages
                 //currentScore--;
                 ScoreTrackerService.RemoveFromTotalScore(2, "LOTR");
                 ScoreTrackerService.UpdateAnswerCounters("LOTR", false);
+                ScoreTrackerService.UpdateRankBasedOnCurrentScore();
                 StateHasChanged();
             }
         }
